@@ -1,9 +1,9 @@
 {
     "name": "yiisoft/classifier",
     "type": "library",
-    "description": "_____",
+    "description": "Finds classes that implement interfaces",
     "keywords": [
-        "_____"
+        "yiisoft", "classifier", "find", "interface"
     ],
     "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
