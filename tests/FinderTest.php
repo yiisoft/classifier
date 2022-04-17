@@ -5,6 +5,9 @@ namespace Yiisoft\Classifier\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Classifier\Classifier;
+use Yiisoft\Classifier\Tests\Support\Attributes\AuthorAttribute;
+use Yiisoft\Classifier\Tests\Support\Author;
+use Yiisoft\Classifier\Tests\Support\AuthorPost;
 use Yiisoft\Classifier\Tests\Support\Interfaces\PostInterface;
 use Yiisoft\Classifier\Tests\Support\Interfaces\UserInterface;
 use Yiisoft\Classifier\Tests\Support\Post;
@@ -20,11 +23,37 @@ final class FinderTest extends TestCase
     public function testInterfaces(string|array $interfaces, array $expectedClasses)
     {
         $finder = new Classifier(__DIR__);
-        $finder = $finder->implements($interfaces);
+        $finder = $finder->withInterface($interfaces);
 
-        $iterable = $finder->find();
+        $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($iterable));
+        $this->assertEquals($expectedClasses, iterator_to_array($result));
+    }
+
+    /**
+     * @dataProvider attributesDataProvider
+     */
+    public function testAttributes(string|array $attributes, array $expectedClasses)
+    {
+        $finder = new Classifier(__DIR__);
+        $finder = $finder->withAttribute($attributes);
+
+        $result = $finder->find();
+
+        $this->assertEquals($expectedClasses, iterator_to_array($result));
+    }
+
+    /**
+     * @dataProvider mixedDataProvider
+     */
+    public function testMixed(array $attributes, array $interfaces, array $expectedClasses)
+    {
+        $finder = new Classifier(__DIR__);
+        $finder = $finder->withAttribute($attributes)->withInterface($interfaces);
+
+        $result = $finder->find();
+
+        $this->assertEquals($expectedClasses, iterator_to_array($result));
     }
 
     public function interfacesDataProvider(): array
@@ -36,11 +65,11 @@ final class FinderTest extends TestCase
             ],
             [
                 PostInterface::class,
-                [Post::class, PostUser::class],
+                [AuthorPost::class, Post::class, PostUser::class],
             ],
             [
                 [PostInterface::class],
-                [Post::class, PostUser::class],
+                [AuthorPost::class, Post::class, PostUser::class],
             ],
             [
                 [UserInterface::class],
@@ -49,6 +78,36 @@ final class FinderTest extends TestCase
             [
                 [PostInterface::class, UserInterface::class],
                 [PostUser::class],
+            ],
+        ];
+    }
+
+    public function attributesDataProvider(): array
+    {
+        return [
+            [
+                [],
+                [],
+            ],
+            [
+                AuthorAttribute::class,
+                [Author::class, AuthorPost::class],
+            ],
+        ];
+    }
+
+    public function mixedDataProvider(): array
+    {
+        return [
+            [
+                [],
+                [],
+                [],
+            ],
+            [
+                [AuthorAttribute::class],
+                [PostInterface::class],
+                [AuthorPost::class],
             ],
         ];
     }
