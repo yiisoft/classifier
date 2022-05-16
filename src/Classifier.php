@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yiisoft\Classifier;
@@ -26,7 +27,7 @@ final class Classifier
         $this->directory = $directory;
     }
 
-    public function withInterface(string|array $interfaces): Classifier
+    public function withInterface(string|array $interfaces): self
     {
         $new = clone $this;
         foreach ((array)$interfaces as $interface) {
@@ -35,7 +36,7 @@ final class Classifier
         return $new;
     }
 
-    public function withAttribute(string|array $attributes): Classifier
+    public function withAttribute(string|array $attributes): self
     {
         $new = clone $this;
         foreach ((array)$attributes as $attribute) {
@@ -62,7 +63,7 @@ final class Classifier
 
             if ($countInterfaces > 0) {
                 $interfaces = $reflection->getInterfaces();
-                $interfaces = array_map(fn(ReflectionClass $class) => $class->getName(), $interfaces);
+                $interfaces = array_map(fn (ReflectionClass $class) => $class->getName(), $interfaces);
 
                 if (count(array_intersect($this->interfaces, $interfaces)) !== $countInterfaces) {
                     continue;
@@ -71,7 +72,7 @@ final class Classifier
 
             if ($countAttributes) {
                 $attributes = $reflection->getAttributes();
-                $attributes = array_map(fn(ReflectionAttribute $attribute) => $attribute->getName(), $attributes);
+                $attributes = array_map(fn (ReflectionAttribute $attribute) => $attribute->getName(), $attributes);
 
                 if (count(array_intersect($this->attributes, $attributes)) !== $countAttributes) {
                     continue;
