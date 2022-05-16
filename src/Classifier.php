@@ -85,10 +85,13 @@ final class Classifier
 
     private function scanFiles(): void
     {
+        /** @psalm-var string[] $files */
         $files = (new Finder())->in($this->directory)->name('*.php')->sortByName()->files();
 
         foreach ($files as $file) {
-            require_once $file;
+            if (file_exists($file)) {
+                require_once $file;
+            }
         }
     }
 }
