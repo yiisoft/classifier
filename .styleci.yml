@@ -25,7 +25,6 @@ enabled:
   - combine_nested_dirname
   - declare_strict_types
   - dir_constant
-  - final_static_access
   - fully_qualified_strict_types
   - function_to_constant
   - hash_to_slash_comment
@@ -87,3 +86,6 @@ enabled:
   - trailing_comma_in_multiline_array
   - unalign_double_arrow
   - unalign_equals
+  - empty_loop_body_braces
+  - integer_literal_case
+  - union_type_without_spaces
