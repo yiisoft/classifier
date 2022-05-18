@@ -50,7 +50,9 @@ final class FinderTest extends TestCase
     public function testMixed(array $attributes, array $interfaces, array $expectedClasses)
     {
         $finder = new Classifier(__DIR__);
-        $finder = $finder->withAttribute($attributes)->withInterface($interfaces);
+        $finder = $finder
+            ->withAttribute($attributes)
+            ->withInterface($interfaces);
 
         $result = $finder->find();
 
