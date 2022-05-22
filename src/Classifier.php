@@ -88,7 +88,11 @@ final class Classifier
      */
     private function scanFiles(): void
     {
-        $files = (new Finder())->in($this->directory)->name('*.php')->sortByName()->files();
+        $files = (new Finder())
+            ->in($this->directory)
+            ->name('*.php')
+            ->sortByName()
+            ->files();
 
         foreach ($files as $file) {
             require_once $file;
