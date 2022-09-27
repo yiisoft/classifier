@@ -13,18 +13,14 @@ final class Classifier
     /**
      * @var string[]
      */
-    private array $interfaces;
+    private array $interfaces = [];
     /**
      * @var string[]
      */
-    private array $attributes;
-    private string $directory;
+    private array $attributes = [];
 
-    public function __construct(string $directory)
+    public function __construct(private string $directory)
     {
-        $this->interfaces = [];
-        $this->attributes = [];
-        $this->directory = $directory;
     }
 
     public function withInterface(string|array $interfaces): self
