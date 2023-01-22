@@ -129,6 +129,7 @@ final class FinderTest extends TestCase
             ],
         ];
     }
+
     public function parentDataProvider(): array
     {
         return [

@@ -6,5 +6,4 @@ namespace Yiisoft\Classifier\Tests\Support;
 
 class SuperSuperUser extends SuperUser
 {
-
 }
