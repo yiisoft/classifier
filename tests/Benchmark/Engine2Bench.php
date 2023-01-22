@@ -8,16 +8,17 @@ use PhpBench\Benchmark\Metadata\Annotations\BeforeMethods;
 use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 use Yiisoft\Classifier\Classifier;
+use Yiisoft\Classifier\PhpParserClassifier;
 use Yiisoft\Classifier\Tests\Support\Interfaces\PostInterface;
 use Yiisoft\Classifier\Tests\Support\Interfaces\UserInterface;
 
-final class EngineBench
+final class Engine2Bench
 {
-    private Classifier $finder;
+    private PhpParserClassifier $finder;
 
     public function beforeTest()
     {
-        $this->finder = new Classifier(__DIR__);
+        $this->finder = new PhpParserClassifier(__DIR__);
     }
     /**
      * @BeforeMethods("beforeTest")
@@ -35,7 +36,7 @@ final class EngineBench
     {
         return [
             [PostInterface::class],
-            [UserInterface::class]
+            [UserInterface::class, PostInterface::class],
         ];
     }
 }
