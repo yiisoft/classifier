@@ -36,6 +36,9 @@ final class Classifier
         return $new;
     }
 
+    /**
+     * @param class-string $parent
+     */
     public function withParent(string $parent): self
     {
         $new = clone $this;
