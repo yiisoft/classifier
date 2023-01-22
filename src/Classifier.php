@@ -26,7 +26,7 @@ final class Classifier
     public function withInterface(string|array $interfaces): self
     {
         $new = clone $this;
-        foreach ((array)$interfaces as $interface) {
+        foreach ((array) $interfaces as $interface) {
             $new->interfaces[] = $interface;
         }
         return $new;
@@ -35,7 +35,7 @@ final class Classifier
     public function withAttribute(string|array $attributes): self
     {
         $new = clone $this;
-        foreach ((array)$attributes as $attribute) {
+        foreach ((array) $attributes as $attribute) {
             $new->attributes[] = $attribute;
         }
         return $new;
@@ -56,6 +56,10 @@ final class Classifier
 
         foreach ($classesToFind as $className) {
             $reflection = new ReflectionClass($className);
+            $filePath = $reflection->getFileName();
+            if ($filePath === false || !str_starts_with($filePath, $this->directory)) {
+                continue;
+            }
 
             if ($countInterfaces > 0) {
                 $interfaces = $reflection->getInterfaces();
