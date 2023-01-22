@@ -13,6 +13,8 @@ use Yiisoft\Classifier\Tests\Support\Interfaces\PostInterface;
 use Yiisoft\Classifier\Tests\Support\Interfaces\UserInterface;
 use Yiisoft\Classifier\Tests\Support\Post;
 use Yiisoft\Classifier\Tests\Support\PostUser;
+use Yiisoft\Classifier\Tests\Support\SuperSuperUser;
+use Yiisoft\Classifier\Tests\Support\SuperUser;
 use Yiisoft\Classifier\Tests\Support\User;
 use Yiisoft\Classifier\Tests\Support\UserSubclass;
 
@@ -38,6 +40,19 @@ final class FinderTest extends TestCase
     {
         $finder = new Classifier(__DIR__);
         $finder = $finder->withAttribute($attributes);
+
+        $result = $finder->find();
+
+        $this->assertEquals($expectedClasses, iterator_to_array($result));
+    }
+
+    /**
+     * @dataProvider parentDataProvider
+     */
+    public function testParent(string $parent, array $expectedClasses)
+    {
+        $finder = new Classifier(__DIR__);
+        $finder = $finder->withParent($parent);
 
         $result = $finder->find();
 
@@ -76,7 +91,7 @@ final class FinderTest extends TestCase
             ],
             [
                 [UserInterface::class],
-                [PostUser::class, User::class, UserSubclass::class],
+                [PostUser::class, SuperSuperUser::class, SuperUser::class, User::class, UserSubclass::class],
             ],
             [
                 [PostInterface::class, UserInterface::class],
@@ -111,6 +126,15 @@ final class FinderTest extends TestCase
                 [AuthorAttribute::class],
                 [PostInterface::class],
                 [AuthorPost::class],
+            ],
+        ];
+    }
+    public function parentDataProvider(): array
+    {
+        return [
+            [
+                User::class,
+                [SuperSuperUser::class, SuperUser::class],
             ],
         ];
     }
