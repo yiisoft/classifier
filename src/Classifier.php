@@ -79,7 +79,7 @@ final class Classifier
 
             if ($countInterfaces > 0) {
                 $interfaces = $reflection->getInterfaces();
-                $interfaces = array_map(fn (ReflectionClass $class) => $class->getName(), $interfaces);
+                $interfaces = array_map(fn(ReflectionClass $class) => $class->getName(), $interfaces);
 
                 if (count(array_intersect($this->interfaces, $interfaces)) !== $countInterfaces) {
                     continue;
@@ -89,7 +89,7 @@ final class Classifier
             if ($countAttributes > 0) {
                 $attributes = $reflection->getAttributes();
                 $attributes = array_map(
-                    static fn (ReflectionAttribute $attribute) => $attribute->getName(),
+                    static fn(ReflectionAttribute $attribute) => $attribute->getName(),
                     $attributes
                 );
 
