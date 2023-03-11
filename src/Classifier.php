@@ -27,6 +27,9 @@ final class Classifier
     {
     }
 
+    /**
+     * @param string|string[] $interfaces
+     */
     public function withInterface(string|array $interfaces): self
     {
         $new = clone $this;
@@ -37,7 +40,9 @@ final class Classifier
     }
 
     /**
-     * @param class-string $parent
+     * @param string $parent
+     *
+     * @psalm-param class-string $parent
      */
     public function withParent(string $parent): self
     {
@@ -46,6 +51,9 @@ final class Classifier
         return $new;
     }
 
+    /**
+     * @param string|string[] $attributes
+     */
     public function withAttribute(string|array $attributes): self
     {
         $new = clone $this;
