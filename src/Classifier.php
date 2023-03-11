@@ -40,8 +40,6 @@ final class Classifier
     }
 
     /**
-     * @param string $parent
-     *
      * @psalm-param class-string $parent
      */
     public function withParent(string $parent): self
