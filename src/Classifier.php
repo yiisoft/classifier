@@ -18,11 +18,18 @@ final class Classifier
      * @var string[]
      */
     private array $attributes = [];
+    /**
+     * @psalm-var class-string
+     */
+    private ?string $parent = null;
 
     public function __construct(private string $directory)
     {
     }
 
+    /**
+     * @param string|string[] $interfaces
+     */
     public function withInterface(string|array $interfaces): self
     {
         $new = clone $this;
@@ -32,6 +39,19 @@ final class Classifier
         return $new;
     }
 
+    /**
+     * @psalm-param class-string $parent
+     */
+    public function withParent(string $parent): self
+    {
+        $new = clone $this;
+        $new->parent = $parent;
+        return $new;
+    }
+
+    /**
+     * @param string|string[] $attributes
+     */
     public function withAttribute(string|array $attributes): self
     {
         $new = clone $this;
@@ -46,7 +66,7 @@ final class Classifier
         $countInterfaces = count($this->interfaces);
         $countAttributes = count($this->attributes);
 
-        if ($countInterfaces === 0 && $countAttributes === 0) {
+        if ($countInterfaces === 0 && $countAttributes === 0 && $this->parent === null) {
             return [];
         }
 
@@ -63,18 +83,27 @@ final class Classifier
 
             if ($countInterfaces > 0) {
                 $interfaces = $reflection->getInterfaces();
-                $interfaces = array_map(fn (ReflectionClass $class) => $class->getName(), $interfaces);
+                $interfaces = array_map(fn(ReflectionClass $class) => $class->getName(), $interfaces);
 
                 if (count(array_intersect($this->interfaces, $interfaces)) !== $countInterfaces) {
                     continue;
                 }
             }
 
-            if ($countAttributes) {
+            if ($countAttributes > 0) {
                 $attributes = $reflection->getAttributes();
-                $attributes = array_map(fn (ReflectionAttribute $attribute) => $attribute->getName(), $attributes);
+                $attributes = array_map(
+                    static fn(ReflectionAttribute $attribute) => $attribute->getName(),
+                    $attributes
+                );
 
                 if (count(array_intersect($this->attributes, $attributes)) !== $countAttributes) {
+                    continue;
+                }
+            }
+
+            if ($this->parent !== null) {
+                if (!is_subclass_of($className, $this->parent)) {
                     continue;
                 }
             }
