@@ -74,10 +74,15 @@ final class Classifier
 
         $classesToFind = get_declared_classes();
 
+        $baseDirectory = $this->directory;
+        if (str_contains($baseDirectory, '\\')) {
+            $baseDirectory = str_replace('\\', '/', $baseDirectory);
+        }
+
         foreach ($classesToFind as $className) {
             $reflection = new ReflectionClass($className);
             $filePath = $reflection->getFileName();
-            if ($filePath === false || !str_starts_with($filePath, $this->directory)) {
+            if ($filePath === false || !str_starts_with($filePath, $baseDirectory)) {
                 continue;
             }
 
