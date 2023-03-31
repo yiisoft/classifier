@@ -75,8 +75,8 @@ final class Classifier
         $classesToFind = get_declared_classes();
 
         $baseDirectory = $this->directory;
-        if (str_contains($baseDirectory, '\\')) {
-            $baseDirectory = str_replace('\\', '/', $baseDirectory);
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $baseDirectory = str_replace('/', '\\', $baseDirectory);
         }
 
         foreach ($classesToFind as $className) {
