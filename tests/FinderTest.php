@@ -25,10 +25,10 @@ final class FinderTest extends TestCase
     /**
      * @dataProvider interfacesDataProvider
      */
-    public function testInterfaces(string $directory, string|array $interfaces, array $expectedClasses)
+    public function testInterfaces(string $directory, array $interfaces, array $expectedClasses): void
     {
         $finder = new Classifier($directory);
-        $finder = $finder->withInterface($interfaces);
+        $finder = $finder->withInterface(...$interfaces);
 
         $result = $finder->find();
 
@@ -45,7 +45,7 @@ final class FinderTest extends TestCase
             ],
             [
                 __DIR__,
-                PostInterface::class,
+                [PostInterface::class],
                 [AuthorPost::class, Post::class, PostUser::class],
             ],
             [
@@ -79,10 +79,10 @@ final class FinderTest extends TestCase
     /**
      * @dataProvider attributesDataProvider
      */
-    public function testAttributes(string|array $attributes, array $expectedClasses)
+    public function testAttributes(array $attributes, array $expectedClasses): void
     {
         $finder = new Classifier(__DIR__);
-        $finder = $finder->withAttribute($attributes);
+        $finder = $finder->withAttribute(...$attributes);
 
         $result = $finder->find();
 
@@ -92,7 +92,7 @@ final class FinderTest extends TestCase
     /**
      * @dataProvider parentDataProvider
      */
-    public function testParent(string $parent, array $expectedClasses)
+    public function testParent(string $parent, array $expectedClasses): void
     {
         $finder = new Classifier(__DIR__);
         $finder = $finder->withParent($parent);
@@ -110,7 +110,7 @@ final class FinderTest extends TestCase
                 [],
             ],
             [
-                AuthorAttribute::class,
+                [AuthorAttribute::class],
                 [Author::class, AuthorPost::class],
             ],
         ];
@@ -119,12 +119,12 @@ final class FinderTest extends TestCase
     /**
      * @dataProvider mixedDataProvider
      */
-    public function testMixed(array $attributes, array $interfaces, array $expectedClasses)
+    public function testMixed(array $attributes, array $interfaces, array $expectedClasses): void
     {
         $finder = new Classifier(__DIR__);
         $finder = $finder
-            ->withAttribute($attributes)
-            ->withInterface($interfaces);
+            ->withAttribute(...$attributes)
+            ->withInterface(...$interfaces);
 
         $result = $finder->find();
 
