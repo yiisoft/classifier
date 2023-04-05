@@ -28,14 +28,13 @@ final class Classifier
     }
 
     /**
-     * @param string|string[] $interfaces
+     * @psalm-param class-string ...$interfaces
      */
-    public function withInterface(string|array $interfaces): self
+    public function withInterface(string ...$interfaces): self
     {
         $new = clone $this;
-        foreach ((array) $interfaces as $interface) {
-            $new->interfaces[] = $interface;
-        }
+        array_push($new->interfaces, ...array_values($interfaces));
+
         return $new;
     }
 
@@ -50,14 +49,13 @@ final class Classifier
     }
 
     /**
-     * @param string|string[] $attributes
+     * @psalm-param class-string ...$attributes
      */
-    public function withAttribute(string|array $attributes): self
+    public function withAttribute(string ...$attributes): self
     {
         $new = clone $this;
-        foreach ((array) $attributes as $attribute) {
-            $new->attributes[] = $attribute;
-        }
+        array_push($new->attributes, ...array_values($attributes));
+
         return $new;
     }
 
@@ -88,7 +86,7 @@ final class Classifier
 
             if ($countInterfaces > 0) {
                 $interfaces = $reflection->getInterfaces();
-                $interfaces = array_map(fn(ReflectionClass $class) => $class->getName(), $interfaces);
+                $interfaces = array_map(static fn(ReflectionClass $class) => $class->getName(), $interfaces);
 
                 if (count(array_intersect($this->interfaces, $interfaces)) !== $countInterfaces) {
                     continue;
@@ -107,10 +105,8 @@ final class Classifier
                 }
             }
 
-            if ($this->parent !== null) {
-                if (!is_subclass_of($className, $this->parent)) {
-                    continue;
-                }
+            if (($this->parent !== null) && !is_subclass_of($className, $this->parent)) {
+                continue;
             }
 
             yield $className;
