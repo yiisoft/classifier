@@ -21,15 +21,15 @@ final class Classifier
     /**
      * @var class-string
      */
-    private ?string $targetClass = null;
+    private ?string $parentClass = null;
     /**
      * @var string[]
      */
-    private array $dirs;
+    private array $directories;
 
     public function __construct(string ...$directory)
     {
-        $this->dirs = $directory;
+        $this->directories = $directory;
     }
 
     /**
@@ -44,12 +44,12 @@ final class Classifier
     }
 
     /**
-     * @psalm-param class-string $targetClass
+     * @psalm-param class-string $parentClass
      */
-    public function withTargetClass(string $targetClass): self
+    public function withParentClass(string $parentClass): self
     {
         $new = clone $this;
-        $new->targetClass = $targetClass;
+        $new->parentClass = $parentClass;
         return $new;
     }
 
@@ -72,7 +72,7 @@ final class Classifier
         $countInterfaces = count($this->interfaces);
         $countAttributes = count($this->attributes);
 
-        if ($countInterfaces === 0 && $countAttributes === 0 && $this->targetClass === null) {
+        if ($countInterfaces === 0 && $countAttributes === 0 && $this->parentClass === null) {
             return [];
         }
 
@@ -88,7 +88,7 @@ final class Classifier
             }
 
             $matchedDirs = array_filter(
-                $this->dirs,
+                $this->directories,
                 static fn($directory) => str_starts_with($reflection->getFileName(), $directory)
             );
 
@@ -117,7 +117,7 @@ final class Classifier
                 }
             }
 
-            if (($this->targetClass !== null) && !is_subclass_of($className, $this->targetClass)) {
+            if (($this->parentClass !== null) && !is_subclass_of($className, $this->parentClass)) {
                 continue;
             }
 
@@ -131,7 +131,7 @@ final class Classifier
     private function scanFiles(): void
     {
         $files = (new Finder())
-            ->in($this->dirs)
+            ->in($this->directories)
             ->name('*.php')
             ->sortByName()
             ->files();

@@ -95,7 +95,7 @@ final class ClassifierTest extends TestCase
     public function testTargetClass(string $parent, array $expectedClasses): void
     {
         $finder = new Classifier(__DIR__);
-        $finder = $finder->withTargetClass($parent);
+        $finder = $finder->withParentClass($parent);
 
         $result = $finder->find();
 
