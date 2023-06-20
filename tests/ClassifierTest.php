@@ -20,7 +20,7 @@ use Yiisoft\Classifier\Tests\Support\SuperUser;
 use Yiisoft\Classifier\Tests\Support\User;
 use Yiisoft\Classifier\Tests\Support\UserSubclass;
 
-final class FinderTest extends TestCase
+final class ClassifierTest extends TestCase
 {
     /**
      * @dataProvider interfacesDataProvider
@@ -90,12 +90,12 @@ final class FinderTest extends TestCase
     }
 
     /**
-     * @dataProvider parentDataProvider
+     * @dataProvider targetClassDataProvider
      */
-    public function testParent(string $parent, array $expectedClasses): void
+    public function testTargetClass(string $parent, array $expectedClasses): void
     {
         $finder = new Classifier(__DIR__);
-        $finder = $finder->withParent($parent);
+        $finder = $finder->withTargetClass($parent);
 
         $result = $finder->find();
 
@@ -147,7 +147,7 @@ final class FinderTest extends TestCase
         ];
     }
 
-    public function parentDataProvider(): array
+    public function targetClassDataProvider(): array
     {
         return [
             [
