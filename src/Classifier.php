@@ -79,6 +79,10 @@ final class Classifier
         $this->scanFiles();
 
         $classesToFind = get_declared_classes();
+        $directories = array_map(
+            static fn($directory) => DIRECTORY_SEPARATOR === '\\' ? str_replace('/', '\\', $directory) : $directory,
+            $this->directories
+        );
 
         foreach ($classesToFind as $className) {
             $reflection = new ReflectionClass($className);
@@ -88,7 +92,7 @@ final class Classifier
             }
 
             $matchedDirs = array_filter(
-                $this->directories,
+                $directories,
                 static fn($directory) => str_starts_with($reflection->getFileName(), $directory)
             );
 
