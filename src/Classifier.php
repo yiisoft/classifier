@@ -79,10 +79,15 @@ final class Classifier
         $this->scanFiles();
 
         $classesToFind = get_declared_classes();
-        $directories = array_map(
-            static fn($directory) => DIRECTORY_SEPARATOR === '\\' ? str_replace('/', '\\', $directory) : $directory,
-            $this->directories
-        );
+        $isWindows = DIRECTORY_SEPARATOR === '\\';
+        $directories = $this->directories;
+
+        if ($isWindows) {
+            $directories = array_map(
+                static fn($directory) => str_replace('/', '\\', $directory),
+                $this->directories
+            );
+        }
 
         foreach ($classesToFind as $className) {
             $reflection = new ReflectionClass($className);
