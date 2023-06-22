@@ -32,6 +32,7 @@ final class ClassifierTest extends TestCase
 
         $this->assertEqualsCanonicalizing([UserInDir1::class, UserInDir2::class], iterator_to_array($result));
     }
+
     /**
      * @dataProvider interfacesDataProvider
      */
