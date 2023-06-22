@@ -83,6 +83,7 @@ final class Classifier
         $directories = $this->directories;
 
         if ($isWindows) {
+            /** @var string[] $directories */
             $directories = str_replace('/', '\\', $directories);
         }
 
