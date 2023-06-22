@@ -19,7 +19,7 @@ final class Classifier
      */
     private array $attributes = [];
     /**
-     * @var class-string
+     * @psalm-var class-string
      */
     private ?string $parentClass = null;
     /**
@@ -27,9 +27,9 @@ final class Classifier
      */
     private array $directories;
 
-    public function __construct(string ...$directory)
+    public function __construct(string $directory, string ...$directories)
     {
-        $this->directories = $directory;
+        $this->directories = [$directory, ...$directories];
     }
 
     /**
@@ -65,7 +65,7 @@ final class Classifier
     }
 
     /**
-     * @return iterable<class-string>
+     * @psalm-return iterable<class-string>
      */
     public function find(): iterable
     {
