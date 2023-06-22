@@ -83,10 +83,7 @@ final class Classifier
         $directories = $this->directories;
 
         if ($isWindows) {
-            $directories = array_map(
-                static fn($directory) => str_replace('/', '\\', $directory),
-                $this->directories
-            );
+            $directories = str_replace('/', '\\', $directories);
         }
 
         foreach ($classesToFind as $className) {

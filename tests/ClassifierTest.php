@@ -32,7 +32,7 @@ final class ClassifierTest extends TestCase
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     public function interfacesDataProvider(): array
@@ -86,20 +86,20 @@ final class ClassifierTest extends TestCase
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     /**
-     * @dataProvider targetClassDataProvider
+     * @dataProvider parentClassDataProvider
      */
-    public function testTargetClass(string $parent, array $expectedClasses): void
+    public function testParentClass(string $parent, array $expectedClasses): void
     {
         $finder = new Classifier(__DIR__);
         $finder = $finder->withParentClass($parent);
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     public function attributesDataProvider(): array
@@ -128,7 +128,7 @@ final class ClassifierTest extends TestCase
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     public function mixedDataProvider(): array
@@ -147,7 +147,7 @@ final class ClassifierTest extends TestCase
         ];
     }
 
-    public function targetClassDataProvider(): array
+    public function parentClassDataProvider(): array
     {
         return [
             [
