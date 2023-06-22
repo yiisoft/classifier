@@ -29,7 +29,7 @@ final class Classifier
 
     public function __construct(string $directory, string ...$directories)
     {
-        $this->directories = [$directory, ...$directories];
+        $this->directories = [$directory, ...array_values($directories)];
     }
 
     /**
