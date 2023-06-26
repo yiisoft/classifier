@@ -21,10 +21,15 @@ final class Classifier
     /**
      * @psalm-var class-string
      */
-    private ?string $parent = null;
+    private ?string $parentClass = null;
+    /**
+     * @var string[]
+     */
+    private array $directories;
 
-    public function __construct(private string $directory)
+    public function __construct(string $directory, string ...$directories)
     {
+        $this->directories = [$directory, ...array_values($directories)];
     }
 
     /**
@@ -39,12 +44,12 @@ final class Classifier
     }
 
     /**
-     * @psalm-param class-string $parent
+     * @psalm-param class-string $parentClass
      */
-    public function withParent(string $parent): self
+    public function withParentClass(string $parentClass): self
     {
         $new = clone $this;
-        $new->parent = $parent;
+        $new->parentClass = $parentClass;
         return $new;
     }
 
@@ -59,28 +64,42 @@ final class Classifier
         return $new;
     }
 
+    /**
+     * @psalm-return iterable<class-string>
+     */
     public function find(): iterable
     {
         $countInterfaces = count($this->interfaces);
         $countAttributes = count($this->attributes);
 
-        if ($countInterfaces === 0 && $countAttributes === 0 && $this->parent === null) {
+        if ($countInterfaces === 0 && $countAttributes === 0 && $this->parentClass === null) {
             return [];
         }
 
         $this->scanFiles();
 
         $classesToFind = get_declared_classes();
+        $isWindows = DIRECTORY_SEPARATOR === '\\';
+        $directories = $this->directories;
 
-        $baseDirectory = $this->directory;
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $baseDirectory = str_replace('/', '\\', $baseDirectory);
+        if ($isWindows) {
+            /** @var string[] $directories */
+            $directories = str_replace('/', '\\', $directories);
         }
 
         foreach ($classesToFind as $className) {
             $reflection = new ReflectionClass($className);
-            $filePath = $reflection->getFileName();
-            if ($filePath === false || !str_starts_with($filePath, $baseDirectory)) {
+
+            if (!$reflection->isUserDefined()) {
+                continue;
+            }
+
+            $matchedDirs = array_filter(
+                $directories,
+                static fn($directory) => str_starts_with($reflection->getFileName(), $directory)
+            );
+
+            if (count($matchedDirs) === 0) {
                 continue;
             }
 
@@ -105,7 +124,7 @@ final class Classifier
                 }
             }
 
-            if (($this->parent !== null) && !is_subclass_of($className, $this->parent)) {
+            if (($this->parentClass !== null) && !is_subclass_of($className, $this->parentClass)) {
                 continue;
             }
 
@@ -119,7 +138,7 @@ final class Classifier
     private function scanFiles(): void
     {
         $files = (new Finder())
-            ->in($this->directory)
+            ->in($this->directories)
             ->name('*.php')
             ->sortByName()
             ->files();

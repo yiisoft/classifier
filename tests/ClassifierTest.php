@@ -20,8 +20,19 @@ use Yiisoft\Classifier\Tests\Support\SuperUser;
 use Yiisoft\Classifier\Tests\Support\User;
 use Yiisoft\Classifier\Tests\Support\UserSubclass;
 
-final class FinderTest extends TestCase
+final class ClassifierTest extends TestCase
 {
+    public function testMultipleDirectories()
+    {
+        $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
+        $finder = new Classifier(...$dirs);
+        $finder = $finder->withInterface(UserInterface::class);
+
+        $result = $finder->find();
+
+        $this->assertEqualsCanonicalizing([UserInDir1::class, UserInDir2::class], iterator_to_array($result));
+    }
+
     /**
      * @dataProvider interfacesDataProvider
      */
@@ -32,7 +43,7 @@ final class FinderTest extends TestCase
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     public function interfacesDataProvider(): array
@@ -86,20 +97,20 @@ final class FinderTest extends TestCase
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     /**
-     * @dataProvider parentDataProvider
+     * @dataProvider parentClassDataProvider
      */
-    public function testParent(string $parent, array $expectedClasses): void
+    public function testParentClass(string $parent, array $expectedClasses): void
     {
         $finder = new Classifier(__DIR__);
-        $finder = $finder->withParent($parent);
+        $finder = $finder->withParentClass($parent);
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     public function attributesDataProvider(): array
@@ -128,7 +139,7 @@ final class FinderTest extends TestCase
 
         $result = $finder->find();
 
-        $this->assertEquals($expectedClasses, iterator_to_array($result));
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
     public function mixedDataProvider(): array
@@ -147,7 +158,7 @@ final class FinderTest extends TestCase
         ];
     }
 
-    public function parentDataProvider(): array
+    public function parentClassDataProvider(): array
     {
         return [
             [
