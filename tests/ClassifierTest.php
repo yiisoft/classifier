@@ -9,7 +9,6 @@ use Yiisoft\Classifier\ClassifierInterface;
 
 class ClassifierTest extends BaseClassifierTest
 {
-
     protected function createClassifier(string ...$dirs): ClassifierInterface
     {
         return new Classifier(...$dirs);

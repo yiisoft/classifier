@@ -9,7 +9,6 @@ use Yiisoft\Classifier\PhpParserClassifier;
 
 class PhpParserClassifierTest extends BaseClassifierTest
 {
-
     protected function createClassifier(string ...$dirs): ClassifierInterface
     {
         return new PhpParserClassifier(...$dirs);
