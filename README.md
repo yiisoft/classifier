@@ -26,7 +26,7 @@ The package ...
 The package could be installed with composer:
 
 ```shell
-composer require yiisoft/classifier --prefer-dist
+composer require yiisoft/classifier
 ```
 
 ## General usage
