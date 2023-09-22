@@ -26,7 +26,7 @@ abstract class BaseClassifierTest extends TestCase
     public function testMultipleDirectories()
     {
         $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
-        $finder = new Classifier(...$dirs);
+        $finder = $this->createClassifier(...$dirs);
         $finder = $finder->withInterface(UserInterface::class);
 
         $result = $finder->find();
@@ -39,7 +39,7 @@ abstract class BaseClassifierTest extends TestCase
      */
     public function testInterfaces(string $directory, array $interfaces, array $expectedClasses): void
     {
-        $finder = new Classifier($directory);
+        $finder = $this->createClassifier($directory);
         $finder = $finder->withInterface(...$interfaces);
 
         $result = $finder->find();
@@ -93,7 +93,7 @@ abstract class BaseClassifierTest extends TestCase
      */
     public function testAttributes(array $attributes, array $expectedClasses): void
     {
-        $finder = new Classifier(__DIR__);
+        $finder = $this->createClassifier(__DIR__);
         $finder = $finder->withAttribute(...$attributes);
 
         $result = $finder->find();
@@ -106,7 +106,7 @@ abstract class BaseClassifierTest extends TestCase
      */
     public function testParentClass(string $parent, array $expectedClasses): void
     {
-        $finder = new Classifier(__DIR__);
+        $finder = $this->createClassifier(__DIR__);
         $finder = $finder->withParentClass($parent);
 
         $result = $finder->find();
@@ -133,7 +133,7 @@ abstract class BaseClassifierTest extends TestCase
      */
     public function testMixed(array $attributes, array $interfaces, array $expectedClasses): void
     {
-        $finder = new Classifier(__DIR__);
+        $finder = $this->createClassifier(__DIR__);
         $finder = $finder
             ->withAttribute(...$attributes)
             ->withInterface(...$interfaces);
