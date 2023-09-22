@@ -35,6 +35,11 @@ abstract class AbstractClassifier implements ClassifierInterface
     public function __construct(string $directory, string ...$directories)
     {
         $this->directories = [$directory, ...array_values($directories)];
+        $isWindows = DIRECTORY_SEPARATOR === '\\';
+
+        if ($isWindows) {
+            $this->directories = str_replace('/', '\\', $this->directories);
+        }
     }
 
     /**
