@@ -31,8 +31,7 @@ final class PhpParserClassifier extends AbstractClassifier
     protected function getAvailableClasses(): iterable
     {
         $files = $this->getFiles();
-        $filter = fn(string $className): bool => /** @psalm-var class-string $className */ $this->skipClass($className);
-        $visitor = new ClassifierVisitor($filter);
+        $visitor = new ClassifierVisitor($this->interfaces, $this->attributes, $this->parentClass);
         $this->nodeTraverser->addVisitor($visitor);
 
         foreach ($files as $file) {
