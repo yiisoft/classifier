@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Classifier;
 
-use ReflectionAttribute;
-use ReflectionClass;
-use Symfony\Component\Finder\Finder;
-
 final class Classifier extends AbstractClassifier
 {
     /**

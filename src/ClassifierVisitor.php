@@ -31,7 +31,7 @@ final class ClassifierVisitor extends NodeVisitorAbstract
              * @psalm-var class-string|null $className
              */
             $className = $node->namespacedName?->toString();
-            if ($className !== null && !call_user_func($this->shouldSkipClass, $className)) {
+            if ($className !== null && !($this->shouldSkipClass)($className)) {
                 $this->classNames[] = $className;
             }
         }
