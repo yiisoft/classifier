@@ -22,7 +22,7 @@ use Yiisoft\Classifier\Tests\Support\UserSubclass;
 
 abstract class BaseClassifierTest extends TestCase
 {
-    public function testMultipleDirectories()
+    public function testMultipleDirectories(): void
     {
         $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
         $finder = $this->createClassifier(...$dirs);
@@ -46,7 +46,7 @@ abstract class BaseClassifierTest extends TestCase
         $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
-    public function interfacesDataProvider(): array
+    public static function interfacesDataProvider(): array
     {
         return [
             [
@@ -113,7 +113,7 @@ abstract class BaseClassifierTest extends TestCase
         $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
-    public function attributesDataProvider(): array
+    public static function attributesDataProvider(): array
     {
         return [
             [
@@ -142,7 +142,7 @@ abstract class BaseClassifierTest extends TestCase
         $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
-    public function mixedDataProvider(): array
+    public static function mixedDataProvider(): array
     {
         return [
             [
@@ -158,7 +158,7 @@ abstract class BaseClassifierTest extends TestCase
         ];
     }
 
-    public function parentClassDataProvider(): array
+    public static function parentClassDataProvider(): array
     {
         return [
             [
