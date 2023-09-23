@@ -52,7 +52,7 @@ final class ClassifierVisitor extends NodeVisitorAbstract
 
     private function skipClass(Class_ $class): bool
     {
-        if ($class->namespacedName === null) {
+        if ($class->namespacedName === null || $class->isAnonymous()) {
             return true;
         }
         $className = $class->namespacedName->toString();

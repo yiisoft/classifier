@@ -41,15 +41,19 @@ final class Classifier extends AbstractClassifier
     {
         $reflectionClass = self::$reflectionsCache[$className] ??= new ReflectionClass($className);
 
-        if ($reflectionClass->isInternal()) {
+        if ($reflectionClass->isInternal() || $reflectionClass->isAnonymous()) {
             return true;
         }
         $directories = $this->directories;
         $isWindows = DIRECTORY_SEPARATOR === '\\';
 
         if ($isWindows) {
-            /** @psalm-var string[] $directories */
+            /**
+             * @psalm-var string[] $directories
+             */
+            // @codeCoverageIgnoreStart
             $directories = str_replace('/', '\\', $directories);
+            // @codeCoverageIgnoreEnd
         }
 
         $matchedDirs = array_filter(
