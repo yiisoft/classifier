@@ -37,7 +37,7 @@ final class Classifier extends AbstractClassifier
     /**
      * @psalm-param class-string $className
      */
-    protected function skipClass(string $className): bool
+    private function skipClass(string $className): bool
     {
         $reflectionClass = self::$reflectionsCache[$className] ??= new ReflectionClass($className);
 
