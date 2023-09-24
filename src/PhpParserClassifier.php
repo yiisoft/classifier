@@ -9,6 +9,10 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
+/**
+ * `PhpParserClassifier` finds classes using the `nikic/PHP-Parser` package and this may require performance tuning, so
+ * you may need follow {@see https://github.com/nikic/PHP-Parser/blob/master/doc/component/Performance.markdown} instructions.
+ */
 final class PhpParserClassifier extends AbstractClassifier
 {
     private Parser $parser;
