@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * @internal for PhpParserClassifier
+ * @internal for ParserClassifier
  */
-final class ClassifierVisitor extends NodeVisitorAbstract
+final class ParserVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array<class-string>

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Classifier\Tests;
 
-use Yiisoft\Classifier\Classifier;
 use Yiisoft\Classifier\ClassifierInterface;
+use Yiisoft\Classifier\ParserClassifier;
 
-class ClassifierTest extends BaseClassifierTest
+class ParserClassifierTest extends BaseClassifierTest
 {
     protected function createClassifier(string ...$dirs): ClassifierInterface
     {
-        return new Classifier(...$dirs);
+        return new ParserClassifier(...$dirs);
     }
 }

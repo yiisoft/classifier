@@ -7,7 +7,7 @@ namespace Yiisoft\Classifier;
 use ReflectionAttribute;
 use ReflectionClass;
 
-final class Classifier extends AbstractClassifier
+final class NativeClassifier extends AbstractClassifier
 {
     /**
      * @psalm-var array<class-string, ReflectionClass>

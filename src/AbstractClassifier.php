@@ -6,6 +6,9 @@ namespace Yiisoft\Classifier;
 
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Base implementation for {@see ClassifierInterface} with common filters.
+ */
 abstract class AbstractClassifier implements ClassifierInterface
 {
     /**
