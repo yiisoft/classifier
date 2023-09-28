@@ -50,6 +50,9 @@
             "Yiisoft\\Classifier\\Tests\\": "tests"
         }
     },
+    "suggest": {
+        "nikic/php-parser": "Need for ParserClassifier implementation"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "3.0.x-dev"

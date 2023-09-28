@@ -7,6 +7,9 @@ namespace Yiisoft\Classifier;
 use ReflectionAttribute;
 use ReflectionClass;
 
+/**
+ * `NativeClassifier` is a classifier that finds classes using PHP's native function {@see get_declared_classes()}.
+ */
 final class NativeClassifier extends AbstractClassifier
 {
     /**
