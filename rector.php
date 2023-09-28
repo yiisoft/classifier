@@ -13,7 +13,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        __DIR__ . '/tests/Support/wrong_file.php'
+        __DIR__ . '/tests/Support/wrong_file.php',
     ]);
 
     // register a single rule
