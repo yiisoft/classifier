@@ -6,6 +6,7 @@ namespace Yiisoft\Classifier;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -30,7 +31,11 @@ final class ParserVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node)
     {
-        if (($node instanceof Class_) && !$this->skipClass($node)) {
+        if (!($node instanceof Class_)) {
+            return parent::enterNode($node);
+        }
+
+        if (!$this->skipClass($node)) {
             /**
              * @var class-string $className
              * @psalm-suppress PossiblyNullReference checked in {@see skipClass} method.
@@ -39,7 +44,7 @@ final class ParserVisitor extends NodeVisitorAbstract
             $this->classNames[] = $className;
         }
 
-        return parent::enterNode($node);
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
 
     /**

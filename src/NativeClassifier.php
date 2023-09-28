@@ -25,7 +25,11 @@ final class NativeClassifier extends AbstractClassifier
         $files = $this->getFiles();
 
         foreach ($files as $file) {
-            require_once $file;
+            try {
+                require_once $file;
+            } catch (\Throwable) {
+                // Ignore syntax errors
+            }
         }
 
         foreach (get_declared_classes() as $className) {
