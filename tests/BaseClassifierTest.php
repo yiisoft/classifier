@@ -22,6 +22,17 @@ use Yiisoft\Classifier\Tests\Support\UserSubclass;
 
 abstract class BaseClassifierTest extends TestCase
 {
+    public function testMultipleUse(): void
+    {
+        $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
+        $finder = $this->createClassifier(...$dirs);
+        $finder = $finder->withInterface(UserInterface::class);
+
+        $result = $finder->find();
+
+        $this->assertEqualsCanonicalizing(iterator_to_array($finder->find()), iterator_to_array($result));
+    }
+
     public function testMultipleDirectories(): void
     {
         $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
