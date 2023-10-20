@@ -9,7 +9,6 @@ namespace Yiisoft\Classifier;
  */
 final class NativeClassifier extends AbstractClassifier
 {
-
     /**
      * @psalm-suppress UnresolvableInclude
      */

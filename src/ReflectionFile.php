@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Classifier;
 
-
 /**
  * This file was copied from {@link https://github.com/spiral/tokenizer}.
  *
@@ -83,7 +82,6 @@ final class ReflectionFile
     {
         return $this->filename;
     }
-
 
     /**
      * List of declarations names
