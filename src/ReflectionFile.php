@@ -135,7 +135,7 @@ final class ReflectionFile
                         continue 2;
                     }
 
-                    $this->registerDeclaration($tokenID, $token->getTokenName() ?? $token->text);
+                    $this->registerDeclaration($tokenID);
                     break;
             }
         }

@@ -9,11 +9,8 @@ use ReflectionClass;
 
 final class TargetAttribute implements FilterInterface
 {
-    private string $target;
-
-    public function __construct(string $target)
+    public function __construct(private string $target)
     {
-        $this->target = $target;
     }
 
     public function match(ReflectionClass $reflectionClass): bool

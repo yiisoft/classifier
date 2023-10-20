@@ -24,11 +24,7 @@ final class NativeClassifier extends AbstractClassifier
             }
         }
 
-        $declarations = array_merge(
-            get_declared_classes(),
-            get_declared_interfaces(),
-            get_declared_traits()
-        );
+        $declarations = [...get_declared_classes(), ...get_declared_interfaces(), ...get_declared_traits()];
 
         $directories = $this->directories;
         $isWindows = DIRECTORY_SEPARATOR === '\\';
