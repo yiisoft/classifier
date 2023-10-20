@@ -6,6 +6,9 @@ namespace Yiisoft\Classifier\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Classifier\ClassifierInterface;
+use Yiisoft\Classifier\Filter\ClassAttributes;
+use Yiisoft\Classifier\Filter\ClassImplements;
+use Yiisoft\Classifier\Filter\SubclassOf;
 use Yiisoft\Classifier\Tests\Support\Attributes\AuthorAttribute;
 use Yiisoft\Classifier\Tests\Support\Author;
 use Yiisoft\Classifier\Tests\Support\AuthorPost;
@@ -26,7 +29,7 @@ abstract class BaseClassifierTest extends TestCase
     {
         $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
         $finder = $this->createClassifier(...$dirs);
-        $finder = $finder->withInterface(UserInterface::class);
+        $finder = $finder->withFilter(new ClassImplements(UserInterface::class));
 
         $result = $finder->find();
 
@@ -37,7 +40,7 @@ abstract class BaseClassifierTest extends TestCase
     {
         $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
         $finder = $this->createClassifier(...$dirs);
-        $finder = $finder->withInterface(UserInterface::class);
+        $finder = $finder->withFilter(new ClassImplements(UserInterface::class));
 
         $result = $finder->find();
 
@@ -50,7 +53,7 @@ abstract class BaseClassifierTest extends TestCase
     public function testInterfaces(string $directory, array $interfaces, array $expectedClasses): void
     {
         $finder = $this->createClassifier($directory);
-        $finder = $finder->withInterface(...$interfaces);
+        $finder = $finder->withFilter(new ClassImplements(...$interfaces));
 
         $result = $finder->find();
 
@@ -78,7 +81,15 @@ abstract class BaseClassifierTest extends TestCase
             [
                 __DIR__,
                 [UserInterface::class],
-                [UserInDir1::class, UserInDir2::class, PostUser::class, SuperSuperUser::class, SuperUser::class, User::class, UserSubclass::class],
+                [
+                    UserInDir1::class,
+                    UserInDir2::class,
+                    PostUser::class,
+                    SuperSuperUser::class,
+                    SuperUser::class,
+                    User::class,
+                    UserSubclass::class,
+                ],
             ],
             [
                 __DIR__,
@@ -104,7 +115,7 @@ abstract class BaseClassifierTest extends TestCase
     public function testAttributes(array $attributes, array $expectedClasses): void
     {
         $finder = $this->createClassifier(__DIR__);
-        $finder = $finder->withAttribute(...$attributes);
+        $finder = $finder->withFilter(new ClassAttributes(...$attributes));
 
         $result = $finder->find();
 
@@ -117,7 +128,7 @@ abstract class BaseClassifierTest extends TestCase
     public function testParentClass(string $parent, array $expectedClasses): void
     {
         $finder = $this->createClassifier(__DIR__);
-        $finder = $finder->withParentClass($parent);
+        $finder = $finder->withFilter(new SubclassOf($parent));
 
         $result = $finder->find();
 
@@ -145,8 +156,7 @@ abstract class BaseClassifierTest extends TestCase
     {
         $finder = $this->createClassifier(__DIR__);
         $finder = $finder
-            ->withAttribute(...$attributes)
-            ->withInterface(...$interfaces);
+            ->withFilter(new ClassAttributes(...$attributes), new ClassImplements(...$interfaces));
 
         $result = $finder->find();
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Classifier;
 
+use ReflectionClass;
 use Symfony\Component\Finder\Finder;
+use Yiisoft\Classifier\Filter\FilterInterface;
 
 /**
  * Base implementation for {@see ClassifierInterface} with common filters.
@@ -12,17 +14,14 @@ use Symfony\Component\Finder\Finder;
 abstract class AbstractClassifier implements ClassifierInterface
 {
     /**
-     * @var string[]
+     * @psalm-var array<class-string, ReflectionClass>
      */
-    protected array $interfaces = [];
+    protected static array $reflectionsCache = [];
+
     /**
-     * @var string[]
+     * @var FilterInterface[]
      */
-    protected array $attributes = [];
-    /**
-     * @psalm-var class-string
-     */
-    protected ?string $parentClass = null;
+    private array $filters = [];
     /**
      * @var string[]
      */
@@ -33,34 +32,10 @@ abstract class AbstractClassifier implements ClassifierInterface
         $this->directories = [$directory, ...array_values($directories)];
     }
 
-    /**
-     * @psalm-param class-string ...$interfaces
-     */
-    public function withInterface(string ...$interfaces): self
+    public function withFilter(FilterInterface ...$filter): static
     {
         $new = clone $this;
-        array_push($new->interfaces, ...array_values($interfaces));
-
-        return $new;
-    }
-
-    /**
-     * @psalm-param class-string $parentClass
-     */
-    public function withParentClass(string $parentClass): self
-    {
-        $new = clone $this;
-        $new->parentClass = $parentClass;
-        return $new;
-    }
-
-    /**
-     * @psalm-param class-string ...$attributes
-     */
-    public function withAttribute(string ...$attributes): self
-    {
-        $new = clone $this;
-        array_push($new->attributes, ...array_values($attributes));
+        array_push($new->filters, ...array_values($filter));
 
         return $new;
     }
@@ -70,11 +45,16 @@ abstract class AbstractClassifier implements ClassifierInterface
      */
     public function find(): iterable
     {
-        if (empty($this->interfaces) && empty($this->attributes) && $this->parentClass === null) {
+        if (empty($this->filters)) {
             return [];
         }
 
-        yield from $this->getAvailableClasses();
+        foreach ($this->getAvailableDeclarations() as $declaration) {
+            if ($this->skipDeclaration($declaration)) {
+                continue;
+            }
+            yield $declaration;
+        }
     }
 
     protected function getFiles(): Finder
@@ -86,8 +66,25 @@ abstract class AbstractClassifier implements ClassifierInterface
             ->files();
     }
 
+    private function skipDeclaration(string $declaration): bool
+    {
+        $reflectionClass = self::$reflectionsCache[$declaration] ??= new ReflectionClass($declaration);
+
+        if ($reflectionClass->isInternal() || $reflectionClass->isAnonymous()) {
+            return true;
+        }
+
+        foreach ($this->filters as $filter) {
+            if (!$filter->match($reflectionClass)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
-     * @return iterable<class-string>
+     * @return iterable<class-string|trait-string>
      */
-    abstract protected function getAvailableClasses(): iterable;
+    abstract protected function getAvailableDeclarations(): iterable;
 }

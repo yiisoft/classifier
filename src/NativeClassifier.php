@@ -4,23 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Classifier;
 
-use ReflectionAttribute;
-use ReflectionClass;
-
 /**
  * `NativeClassifier` is a classifier that finds classes using PHP's native function {@see get_declared_classes()}.
  */
 final class NativeClassifier extends AbstractClassifier
 {
-    /**
-     * @psalm-var array<class-string, ReflectionClass>
-     */
-    private static array $reflectionsCache = [];
 
     /**
      * @psalm-suppress UnresolvableInclude
      */
-    protected function getAvailableClasses(): iterable
+    protected function getAvailableDeclarations(): iterable
     {
         $files = $this->getFiles();
 
@@ -32,25 +25,12 @@ final class NativeClassifier extends AbstractClassifier
             }
         }
 
-        foreach (get_declared_classes() as $className) {
-            if ($this->skipClass($className)) {
-                continue;
-            }
+        $declarations = array_merge(
+            get_declared_classes(),
+            get_declared_interfaces(),
+            get_declared_traits()
+        );
 
-            yield $className;
-        }
-    }
-
-    /**
-     * @psalm-param class-string $className
-     */
-    private function skipClass(string $className): bool
-    {
-        $reflectionClass = self::$reflectionsCache[$className] ??= new ReflectionClass($className);
-
-        if ($reflectionClass->isInternal() || $reflectionClass->isAnonymous()) {
-            return true;
-        }
         $directories = $this->directories;
         $isWindows = DIRECTORY_SEPARATOR === '\\';
 
@@ -63,36 +43,18 @@ final class NativeClassifier extends AbstractClassifier
             // @codeCoverageIgnoreEnd
         }
 
-        $matchedDirs = array_filter(
-            $directories,
-            static fn($directory) => str_starts_with($reflectionClass->getFileName(), $directory)
-        );
+        foreach ($declarations as $declaration) {
+            $reflectionClass = self::$reflectionsCache[$declaration] ??= new \ReflectionClass($declaration);
 
-        if (count($matchedDirs) === 0) {
-            return true;
-        }
-
-        if (!empty($this->interfaces)) {
-            $interfaces = $reflectionClass->getInterfaces();
-            $interfaces = array_map(static fn(ReflectionClass $class) => $class->getName(), $interfaces);
-
-            if (count(array_intersect($this->interfaces, $interfaces)) !== count($this->interfaces)) {
-                return true;
-            }
-        }
-
-        if (!empty($this->attributes)) {
-            $attributes = $reflectionClass->getAttributes();
-            $attributes = array_map(
-                static fn(ReflectionAttribute $attribute) => $attribute->getName(),
-                $attributes
+            $matchedDirs = array_filter(
+                $directories,
+                static fn($directory) => $reflectionClass->getFileName() && str_starts_with($reflectionClass->getFileName(), $directory)
             );
 
-            if (count(array_intersect($this->attributes, $attributes)) !== count($this->attributes)) {
-                return true;
+            if (count($matchedDirs) === 0) {
+                continue;
             }
+            yield $reflectionClass->getName();
         }
-
-        return ($this->parentClass !== null) && !is_subclass_of($reflectionClass->getName(), $this->parentClass);
     }
 }
