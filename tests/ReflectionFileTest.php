@@ -40,7 +40,7 @@ class ReflectionFileTest extends TestCase
         $reflectionFile = new ReflectionFile(__DIR__ . '/Declarations/ClassWithoutNamespace.php');
 
         $this->assertCount(1, $reflectionFile->getDeclarations());
-        $this->assertEquals(\Person::class, $reflectionFile->getDeclarations()[0]);
+        $this->assertEquals('ClassWithoutNamespace', $reflectionFile->getDeclarations()[0]);
     }
 
     public function testContainingClassKeyword(): void
