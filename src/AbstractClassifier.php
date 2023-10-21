@@ -45,10 +45,6 @@ abstract class AbstractClassifier implements ClassifierInterface
      */
     public function find(): iterable
     {
-        if (empty($this->filters)) {
-            return [];
-        }
-
         foreach ($this->getAvailableDeclarations() as $declaration) {
             if ($this->skipDeclaration($declaration)) {
                 continue;
@@ -68,6 +64,11 @@ abstract class AbstractClassifier implements ClassifierInterface
 
     private function skipDeclaration(string $declaration): bool
     {
+        if (
+            !(interface_exists($declaration) || class_exists($declaration) || trait_exists($declaration))
+        ) {
+            return true;
+        }
         $reflectionClass = self::$reflectionsCache[$declaration] ??= new ReflectionClass($declaration);
 
         if ($reflectionClass->isInternal() || $reflectionClass->isAnonymous()) {
