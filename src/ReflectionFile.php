@@ -76,14 +76,6 @@ final class ReflectionFile
     }
 
     /**
-     * Filename.
-     */
-    public function getFilename(): string
-    {
-        return $this->filename;
-    }
-
-    /**
      * List of declarations names
      */
     public function getDeclarations(): array
@@ -92,21 +84,11 @@ final class ReflectionFile
     }
 
     /**
-     * Get list of tokens associated with given file.
-     *
-     * @return \PhpToken[]
-     */
-    public function getTokens(): array
-    {
-        return $this->tokens;
-    }
-
-    /**
      * Locate every class, interface, trait or enum definition.
      */
     private function locateDeclarations(): void
     {
-        foreach ($this->getTokens() as $tokenID => $token) {
+        foreach ($this->tokens as $tokenID => $token) {
             if ($token->isIgnorable() || !\in_array($token->id, self::TOKENS, true)) {
                 continue;
             }
@@ -170,8 +152,6 @@ final class ReflectionFile
 
         //Whitespaces
         $namespace = \trim($namespace);
-
-        $uses = $this->namespaces[$namespace] ?? [];
 
         if ($this->tokens[$localID]->text === ';') {
             $endingID = \count($this->tokens) - 1;

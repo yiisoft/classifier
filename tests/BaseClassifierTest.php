@@ -9,7 +9,9 @@ use Yiisoft\Classifier\ClassifierInterface;
 use Yiisoft\Classifier\Filter\ClassAttributes;
 use Yiisoft\Classifier\Filter\ClassImplements;
 use Yiisoft\Classifier\Filter\SubclassOf;
+use Yiisoft\Classifier\Filter\TargetAttribute;
 use Yiisoft\Classifier\Tests\Support\Attributes\AuthorAttribute;
+use Yiisoft\Classifier\Tests\Support\Attributes\UserAttribute;
 use Yiisoft\Classifier\Tests\Support\Author;
 use Yiisoft\Classifier\Tests\Support\AuthorPost;
 use Yiisoft\Classifier\Tests\Support\Dir1\UserInDir1;
@@ -123,6 +125,19 @@ abstract class BaseClassifierTest extends TestCase
     }
 
     /**
+     * @dataProvider targetAttributeDataProvider
+     */
+    public function testTargetAttribute(string $attribute, array $expectedClasses): void
+    {
+        $finder = $this->createClassifier(__DIR__);
+        $finder = $finder->withFilter(new TargetAttribute($attribute));
+
+        $result = $finder->find();
+
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
+    }
+
+    /**
      * @dataProvider parentClassDataProvider
      */
     public function testParentClass(string $parent, array $expectedClasses): void
@@ -143,7 +158,25 @@ abstract class BaseClassifierTest extends TestCase
                 [],
             ],
             [
-                [AuthorAttribute::class],
+                [AuthorAttribute::class, UserAttribute::class],
+                [Author::class, AuthorPost::class],
+            ],
+        ];
+    }
+
+    public static function targetAttributeDataProvider(): array
+    {
+        return [
+            [
+                UserSubclass::class,
+                [],
+            ],
+            [
+                UserAttribute::class,
+                [Author::class, AuthorPost::class],
+            ],
+            [
+                AuthorAttribute::class,
                 [Author::class, AuthorPost::class],
             ],
         ];

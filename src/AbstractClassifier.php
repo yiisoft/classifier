@@ -64,12 +64,11 @@ abstract class AbstractClassifier implements ClassifierInterface
 
     private function skipDeclaration(string $declaration): bool
     {
-        if (
-            !(interface_exists($declaration) || class_exists($declaration) || trait_exists($declaration))
-        ) {
+        try {
+            $reflectionClass = self::$reflectionsCache[$declaration] ??= new ReflectionClass($declaration);
+        } catch (\Throwable) {
             return true;
         }
-        $reflectionClass = self::$reflectionsCache[$declaration] ??= new ReflectionClass($declaration);
 
         if ($reflectionClass->isInternal() || $reflectionClass->isAnonymous()) {
             return true;
