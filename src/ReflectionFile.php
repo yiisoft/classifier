@@ -31,14 +31,14 @@ final class ReflectionFile
         '{',
         '}',
         ';',
-        'T_PAAMAYIM_NEKUDOTAYIM',
-        'T_NAMESPACE',
-        'T_STRING',
-        'T_CLASS',
-        'T_INTERFACE',
-        'T_TRAIT',
-        'T_ENUM',
-        'T_NS_SEPARATOR',
+        T_PAAMAYIM_NEKUDOTAYIM,
+        T_NAMESPACE,
+        T_STRING,
+        T_CLASS,
+        T_INTERFACE,
+        T_TRAIT,
+        T_ENUM,
+        T_NS_SEPARATOR,
     ];
 
     /**
@@ -107,7 +107,7 @@ final class ReflectionFile
     private function locateDeclarations(): void
     {
         foreach ($this->getTokens() as $tokenID => $token) {
-            if ($token->isIgnorable() || !\in_array($token->getTokenName(), self::TOKENS, true)) {
+            if ($token->isIgnorable() || !\in_array($token->id, self::TOKENS, true)) {
                 continue;
             }
 
