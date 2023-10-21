@@ -23,6 +23,6 @@ class ReflectionFileTest extends TestCase
         $reflectionFile = new ReflectionFile(__DIR__ . '/Support/namespace.php');
 
         $this->assertCount(2, $reflectionFile->getDeclarations());
-        $this->assertContains('Support\\Entity\\Person', $reflectionFile->getDeclarations());
+        $this->assertContains(\Support\Entity\Person::class, $reflectionFile->getDeclarations());
     }
 }
