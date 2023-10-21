@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Support\Entity {
+namespace Support\Entity;
 
-    class Person
-    {
-    }
+class Person
+{
+}
 
-    class Client
-    {
-    }
+class Client
+{
 }
