@@ -27,7 +27,6 @@ class ReflectionFileTest extends TestCase
         $this->assertContains(\Support\Entity\Person::class, $reflectionFile->getDeclarations());
     }
 
-
     public function testEnumDeclaration(): void
     {
         $reflectionFile = new ReflectionFile(__DIR__ . '/Declarations/StatusEnum.php');

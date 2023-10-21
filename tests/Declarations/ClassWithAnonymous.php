@@ -8,8 +8,7 @@ class ClassWithAnonymous
 {
     public function bar()
     {
-        $class = new class {
-
+        $class = new class () {
         };
     }
 }
