@@ -24,15 +24,18 @@ final class ReflectionFile
     public const O_TOKEN = 0;
     public const C_TOKEN = 1;
 
+    public const T_OPEN_CURLY_BRACES = 123;
+    public const T_CLOSE_CURLY_BRACES = 125;
+    public const T_SEMICOLON = 59;
 
     /**
      * Set of tokens required to detect classes, traits, interfaces declarations. We
      * don't need any other token for that.
      */
     private const TOKENS = [
-        '{',
-        '}',
-        ';',
+        self::T_OPEN_CURLY_BRACES,
+        self::T_CLOSE_CURLY_BRACES,
+        self::T_SEMICOLON,
         T_PAAMAYIM_NEKUDOTAYIM,
         T_NAMESPACE,
         T_STRING,
@@ -95,7 +98,7 @@ final class ReflectionFile
     private function locateDeclarations(): void
     {
         foreach ($this->tokens as $tokenIndex => $token) {
-            if (!\in_array($token->id, self::TOKENS)) {
+            if (!\in_array($token->id, self::TOKENS, true)) {
                 continue;
             }
 
@@ -145,10 +148,6 @@ final class ReflectionFile
 
         do {
             $token = $this->tokens[$localIndex++];
-            if ($token->text === '{') {
-                break;
-            }
-
             $namespace .= $token->text;
         } while (
             isset($this->tokens[$localIndex])
@@ -253,10 +252,12 @@ final class ReflectionFile
     private function endingToken(int $tokenIndex): int
     {
         $level = 0;
+        $hasOpen = false;
         for ($localIndex = $tokenIndex; $localIndex < $this->countTokens; ++$localIndex) {
             $token = $this->tokens[$localIndex];
             if ($token->text === '{') {
                 ++$level;
+                $hasOpen = true;
                 continue;
             }
 
@@ -264,7 +265,7 @@ final class ReflectionFile
                 --$level;
             }
 
-            if ($level === 0) {
+            if ($hasOpen && $level === 0) {
                 break;
             }
         }

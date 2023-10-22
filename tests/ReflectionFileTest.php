@@ -24,7 +24,7 @@ class ReflectionFileTest extends TestCase
         $reflectionFile = new ReflectionFile(__DIR__ . '/Declarations/namespace.php');
 
         $this->assertCount(2, $reflectionFile->getDeclarations());
-        $this->assertContains(\Support\Entity\Person::class, $reflectionFile->getDeclarations());
+        $this->assertContains(\Yiisoft\Classifier\Tests\Declarations\Person::class, $reflectionFile->getDeclarations());
     }
 
     public function testEnumDeclaration(): void
