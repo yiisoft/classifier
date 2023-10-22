@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Classifier\Tests\Declarations {
-    class Person
-    {
-    }
+namespace Yiisoft\Classifier\Tests\Declarations;
 
-    class Client
-    {
-    }
+class Person
+{
+}
+
+class Client
+{
 }
