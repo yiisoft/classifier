@@ -16,8 +16,7 @@ interface ClassifierInterface
     /**
      * Returns all the class names found.
      *
-     * @return iterable List of class names.
-     * @psalm-return iterable<class-string>
+     * @return iterable<class-string> List of class names.
      */
     public function find(): iterable;
 }

@@ -11,6 +11,8 @@ final class TokenizerClassifier extends AbstractClassifier
 {
     /**
      * @psalm-suppress UnresolvableInclude
+     *
+     * @return array<array-key, class-string|trait-string>
      */
     protected function getAvailableDeclarations(): iterable
     {

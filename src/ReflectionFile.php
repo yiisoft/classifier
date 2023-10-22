@@ -8,6 +8,8 @@ namespace Yiisoft\Classifier;
  * This file was copied from {@link https://github.com/spiral/tokenizer}.
  *
  * @internal
+ *
+ * @psalm-type TPosition = list{int, int}
  */
 final class ReflectionFile
 {
@@ -43,6 +45,8 @@ final class ReflectionFile
 
     /**
      * Parsed tokens array.
+     *
+     * @var array<int, \PhpToken>
      */
     private array $tokens;
 
@@ -54,14 +58,14 @@ final class ReflectionFile
     /**
      * Namespaces used in file and their token positions.
      *
-     * @internal
+     * @psalm-var array<string, TPosition>
      */
     private array $namespaces = [];
 
     /**
      * Declarations of classes, interfaces and traits.
      *
-     * @internal
+     * @psalm-var array<class-string|trait-string, TPosition>
      */
     private array $declarations = [];
 
@@ -77,6 +81,8 @@ final class ReflectionFile
 
     /**
      * List of declarations names
+     *
+     * @return array<class-string|trait-string>
      */
     public function getDeclarations(): array
     {
@@ -88,36 +94,36 @@ final class ReflectionFile
      */
     private function locateDeclarations(): void
     {
-        foreach ($this->tokens as $tokenID => $token) {
-            if ($token->isIgnorable() || !\in_array($token->id, self::TOKENS, true)) {
+        foreach ($this->tokens as $tokenIndex => $token) {
+            if (!\in_array($token->id, self::TOKENS)) {
                 continue;
             }
 
             switch ($token->id) {
                 case T_NAMESPACE:
-                    $this->registerNamespace($tokenID);
+                    $this->registerNamespace($tokenIndex);
                     break;
 
                 case T_CLASS:
                 case T_TRAIT:
                 case T_INTERFACE:
                 case T_ENUM:
-                    if ($this->isClassNameConst($tokenID)) {
+                    if ($this->isClassNameConst($tokenIndex)) {
                         // PHP5.5 ClassName::class constant
                         continue 2;
                     }
 
-                    if ($this->isAnonymousClass($tokenID)) {
+                    if ($this->isAnonymousClass($tokenIndex)) {
                         // PHP7.0 Anonymous classes new class ('foo', 'bar')
                         continue 2;
                     }
 
-                    if (!$this->isCorrectDeclaration($tokenID)) {
+                    if (!$this->isCorrectDeclaration($tokenIndex)) {
                         // PHP8.0 Named parameters ->foo(class: 'bar')
                         continue 2;
                     }
 
-                    $this->registerDeclaration($tokenID);
+                    $this->registerDeclaration($tokenIndex);
                     break;
             }
         }
@@ -132,36 +138,36 @@ final class ReflectionFile
     /**
      * Handle namespace declaration.
      */
-    private function registerNamespace(int $tokenID): void
+    private function registerNamespace(int $tokenIndex): void
     {
         $namespace = '';
-        $localID = $tokenID + 1;
+        $localIndex = $tokenIndex + 1;
 
         do {
-            $token = $this->tokens[$localID++];
+            $token = $this->tokens[$localIndex++];
             if ($token->text === '{') {
                 break;
             }
 
             $namespace .= $token->text;
         } while (
-            isset($this->tokens[$localID])
-            && $this->tokens[$localID]->text !== '{'
-            && $this->tokens[$localID]->text !== ';'
+            isset($this->tokens[$localIndex])
+            && $this->tokens[$localIndex]->text !== '{'
+            && $this->tokens[$localIndex]->text !== ';'
         );
 
         //Whitespaces
         $namespace = \trim($namespace);
 
-        if ($this->tokens[$localID]->text === ';') {
-            $endingID = \count($this->tokens) - 1;
+        if ($this->tokens[$localIndex]->text === ';') {
+            $endingIndex = \count($this->tokens) - 1;
         } else {
-            $endingID = $this->endingToken($tokenID);
+            $endingIndex = $this->endingToken($tokenIndex);
         }
 
         $this->namespaces[$namespace] = [
-            self::O_TOKEN => $tokenID,
-            self::C_TOKEN => $endingID,
+            self::O_TOKEN => $tokenIndex,
+            self::C_TOKEN => $endingIndex,
         ];
     }
 
@@ -169,62 +175,65 @@ final class ReflectionFile
      * Handle declaration of class, trait of interface. Declaration will be stored under it's token
      * type in declarations array.
      */
-    private function registerDeclaration(int $tokenID): void
+    private function registerDeclaration(int $tokenIndex): void
     {
-        $localID = $tokenID + 1;
-        while ($this->tokens[$localID]->id !== T_STRING) {
-            ++$localID;
+        $localIndex = $tokenIndex + 1;
+        while ($this->tokens[$localIndex]->id !== T_STRING) {
+            ++$localIndex;
         }
 
-        $name = $this->tokens[$localID]->text;
-        if (!empty($namespace = $this->activeNamespace($tokenID))) {
+        $name = $this->tokens[$localIndex]->text;
+        if (!empty($namespace = $this->activeNamespace($tokenIndex))) {
             $name = $namespace . self::NS_SEPARATOR . $name;
         }
 
+        /** @var class-string|trait-string $name */
         $this->declarations[$name] = [
-            self::O_TOKEN => $tokenID,
-            self::C_TOKEN => $this->endingToken($tokenID),
+            self::O_TOKEN => $tokenIndex,
+            self::C_TOKEN => $this->endingToken($tokenIndex),
         ];
     }
 
     /**
      * Check if token ID represents `ClassName::class` constant statement.
      */
-    private function isClassNameConst(int $tokenID): bool
+    private function isClassNameConst(int $tokenIndex): bool
     {
-        return $this->tokens[$tokenID]->id === T_CLASS
-            && isset($this->tokens[$tokenID - 1])
-            && $this->tokens[$tokenID - 1]->id === T_PAAMAYIM_NEKUDOTAYIM;
+        return $this->tokens[$tokenIndex]->id === T_CLASS
+            && isset($this->tokens[$tokenIndex - 1])
+            && $this->tokens[$tokenIndex - 1]->id === T_PAAMAYIM_NEKUDOTAYIM;
     }
 
     /**
      * Check if token ID represents anonymous class creation, e.g. `new class ('foo', 'bar')`.
      */
-    private function isAnonymousClass(int|string $tokenID): bool
+    private function isAnonymousClass(int $tokenIndex): bool
     {
-        return $this->tokens[$tokenID]->id === T_CLASS
-            && isset($this->tokens[$tokenID - 2])
-            && $this->tokens[$tokenID - 2]->id === T_NEW;
+        return $this->tokens[$tokenIndex]->id === T_CLASS
+            && isset($this->tokens[$tokenIndex - 2])
+            && $this->tokens[$tokenIndex - 2]->id === T_NEW;
     }
 
     /**
      * Check if token ID represents named parameter with name `class`, e.g. `foo(class: SomeClass::name)`.
      */
-    private function isCorrectDeclaration(int|string $tokenID): bool
+    private function isCorrectDeclaration(int $tokenIndex): bool
     {
-        return \in_array($this->tokens[$tokenID]->id, [T_CLASS, T_TRAIT, T_INTERFACE, T_ENUM], true)
-            && isset($this->tokens[$tokenID + 2])
-            && $this->tokens[$tokenID + 1]->id === T_WHITESPACE
-            && $this->tokens[$tokenID + 2]->id === T_STRING;
+        return \in_array($this->tokens[$tokenIndex]->id, [T_CLASS, T_TRAIT, T_INTERFACE, T_ENUM], true)
+            && isset($this->tokens[$tokenIndex + 2])
+            && $this->tokens[$tokenIndex + 1]->id === T_WHITESPACE
+            && $this->tokens[$tokenIndex + 2]->id === T_STRING;
     }
 
     /**
      * Get namespace name active at specified token position.
+     *
+     * @return array-key
      */
-    private function activeNamespace(int $tokenID): string
+    private function activeNamespace(int $tokenIndex): string
     {
         foreach ($this->namespaces as $namespace => $position) {
-            if ($tokenID >= $position[self::O_TOKEN] && $tokenID <= $position[self::C_TOKEN]) {
+            if ($tokenIndex >= $position[self::O_TOKEN] && $tokenIndex <= $position[self::C_TOKEN]) {
                 return $namespace;
             }
         }
@@ -239,13 +248,13 @@ final class ReflectionFile
     }
 
     /**
-     * Find token ID of ending brace.
+     * Find token index of ending brace.
      */
-    private function endingToken(int $tokenID): int
+    private function endingToken(int $tokenIndex): int
     {
-        $level = null;
-        for ($localID = $tokenID; $localID < $this->countTokens; ++$localID) {
-            $token = $this->tokens[$localID];
+        $level = 0;
+        for ($localIndex = $tokenIndex; $localIndex < $this->countTokens; ++$localIndex) {
+            $token = $this->tokens[$localIndex];
             if ($token->text === '{') {
                 ++$level;
                 continue;
@@ -260,6 +269,6 @@ final class ReflectionFile
             }
         }
 
-        return $localID;
+        return $localIndex;
     }
 }

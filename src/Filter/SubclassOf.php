@@ -8,6 +8,9 @@ use ReflectionClass;
 
 final class SubclassOf implements FilterInterface
 {
+    /**
+     * @param class-string $class
+     */
     public function __construct(private string $class)
     {
     }

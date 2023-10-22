@@ -9,6 +9,9 @@ use ReflectionClass;
 
 final class TargetAttribute implements FilterInterface
 {
+    /**
+     * @param class-string $attribute
+     */
     public function __construct(private string $attribute)
     {
     }

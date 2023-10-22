@@ -14,7 +14,7 @@ use Yiisoft\Classifier\Filter\FilterInterface;
 abstract class AbstractClassifier implements ClassifierInterface
 {
     /**
-     * @psalm-var array<class-string, ReflectionClass>
+     * @var array<class-string|trait-string, ReflectionClass>
      */
     protected static array $reflectionsCache = [];
 
@@ -41,7 +41,7 @@ abstract class AbstractClassifier implements ClassifierInterface
     }
 
     /**
-     * @psalm-return iterable<class-string>
+     * @return iterable<class-string>
      */
     public function find(): iterable
     {
@@ -62,6 +62,9 @@ abstract class AbstractClassifier implements ClassifierInterface
             ->files();
     }
 
+    /**
+     * @param class-string|trait-string $declaration
+     */
     private function skipDeclaration(string $declaration): bool
     {
         try {
