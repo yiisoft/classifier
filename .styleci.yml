@@ -9,6 +9,7 @@ finder:
     - vendor
   not-name:
     - wrong_file.php
+    - namespace.php
 
 enabled:
   - alpha_ordered_traits
