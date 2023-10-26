@@ -28,7 +28,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
+        "ext-tokenizer": "*",
         "symfony/finder": "^5.4|^6.0"
     },
     "require-dev": {
