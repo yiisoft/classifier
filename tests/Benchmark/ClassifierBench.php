@@ -19,6 +19,7 @@ final class ClassifierBench
         $dirs = [
             dirname(__DIR__, 2) . '/vendor',
             dirname(__DIR__) . '/Declarations',
+            dirname(__DIR__) . '/Support',
         ];
 
         yield 'Native' => ['classifier' => NativeClassifier::class, 'dirs' => $dirs];

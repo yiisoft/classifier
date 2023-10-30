@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Classifier;
 
 /**
- * `NativeClassifier` is a classifier that finds classes using PHP's native function {@see get_declared_classes()}.
+ * `NativeClassifier` is a classifier that finds classes, interfaces, traits and enums using PHP's native functions:
+ * - {@see get_declared_classes()}
+ * - {@see get_declared_interfaces()}
+ * - {@see get_declared_traits()}
  */
 final class NativeClassifier extends AbstractClassifier
 {
@@ -24,6 +27,7 @@ final class NativeClassifier extends AbstractClassifier
             }
         }
 
+        /** @var string[] $declarations */
         $declarations = [...get_declared_classes(), ...get_declared_interfaces(), ...get_declared_traits()];
 
         $directories = $this->directories;

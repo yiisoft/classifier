@@ -6,6 +6,7 @@ namespace Yiisoft\Classifier\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Classifier\ReflectionFile;
+use Yiisoft\Classifier\Tests\Declarations\Car;
 use Yiisoft\Classifier\Tests\Declarations\StatusEnum;
 use Yiisoft\Classifier\Tests\Support\User;
 
@@ -48,7 +49,7 @@ class ReflectionFileTest extends TestCase
         $reflectionFile = new ReflectionFile(__DIR__ . '/Declarations/Car.php');
 
         $this->assertCount(1, $reflectionFile->getDeclarations());
-        $this->assertEquals(\Car::class, $reflectionFile->getDeclarations()[0]);
+        $this->assertEquals(Car::class, $reflectionFile->getDeclarations()[0]);
     }
 
     public function testBrokenClass(): void
