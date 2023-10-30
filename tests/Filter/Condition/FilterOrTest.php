@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Classifier\Tests\Filter\Condition;
 
-use Yiisoft\Classifier\Filter\ClassAttributes;
 use Yiisoft\Classifier\Filter\ClassImplements;
-use Yiisoft\Classifier\Filter\Condition\FilterAnd;
 use Yiisoft\Classifier\Filter\Condition\FilterOr;
 use Yiisoft\Classifier\Filter\SubclassOf;
 use Yiisoft\Classifier\Filter\TargetAttribute;
