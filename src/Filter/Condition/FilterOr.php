@@ -9,6 +9,9 @@ use Yiisoft\Classifier\Filter\FilterInterface;
 
 class FilterOr implements FilterInterface
 {
+    /**
+     * @var FilterInterface[]
+     */
     private array $filters;
 
     public function __construct(FilterInterface ...$filters)
