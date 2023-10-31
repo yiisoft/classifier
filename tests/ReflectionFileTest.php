@@ -7,6 +7,8 @@ namespace Yiisoft\Classifier\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Classifier\ReflectionFile;
 use Yiisoft\Classifier\Tests\Declarations\Car;
+use Yiisoft\Classifier\Tests\Declarations\CommonTrait;
+use Yiisoft\Classifier\Tests\Declarations\EngineInterface;
 use Yiisoft\Classifier\Tests\Declarations\StatusEnum;
 use Yiisoft\Classifier\Tests\Support\User;
 
@@ -26,6 +28,22 @@ class ReflectionFileTest extends TestCase
 
         $this->assertCount(2, $reflectionFile->getDeclarations());
         $this->assertContains(\Yiisoft\Classifier\Tests\Declarations\Person::class, $reflectionFile->getDeclarations());
+    }
+
+    public function testInterfaceDeclaration(): void
+    {
+        $reflectionFile = new ReflectionFile(__DIR__ . '/Declarations/Engine.php');
+
+        $this->assertCount(2, $reflectionFile->getDeclarations());
+        $this->assertContains(EngineInterface::class, $reflectionFile->getDeclarations());
+    }
+
+    public function testTraitDeclaration(): void
+    {
+        $reflectionFile = new ReflectionFile(__DIR__ . '/Declarations/CommonTrait.php');
+
+        $this->assertCount(1, $reflectionFile->getDeclarations());
+        $this->assertEquals(CommonTrait::class, $reflectionFile->getDeclarations()[0]);
     }
 
     public function testEnumDeclaration(): void
