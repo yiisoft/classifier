@@ -29,12 +29,10 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.1",
-        "ext-tokenizer": "*",
         "symfony/finder": "^5.4|^6.0"
     },
     "require-dev": {
         "maglnet/composer-require-checker": "^4.2",
-        "nikic/php-parser": "^4.17",
         "phpbench/phpbench": "^1.2",
         "phpunit/phpunit": "^9.5",
         "rector/rector": "^0.18.0",
@@ -53,7 +51,7 @@
         }
     },
     "suggest": {
-        "nikic/php-parser": "Need for ParserClassifier implementation"
+        "ext-tokenizer": "Need for TokenizerClassifier implementation"
     },
     "extra": {
         "branch-alias": {

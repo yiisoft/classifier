@@ -1,11 +1,5 @@
 {
     "symbol-whitelist": [
-        "PhpParser\\Node",
-        "PhpParser\\NodeTraverser",
-        "PhpParser\\NodeVisitorAbstract",
-        "PhpParser\\NodeVisitor\\NameResolver",
-        "PhpParser\\Node\\Stmt\\Class_",
-        "PhpParser\\Parser",
-        "PhpParser\\ParserFactory"
+        "PhpToken"
     ]
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Classifier;
 
+use PhpToken;
+
 /**
  * This file was copied from {@link https://github.com/spiral/tokenizer}.
  *
@@ -49,7 +51,7 @@ final class ReflectionFile
     /**
      * Parsed tokens array.
      *
-     * @var array<int, \PhpToken>
+     * @var array<int, PhpToken>
      */
     private array $tokens;
 
@@ -75,7 +77,7 @@ final class ReflectionFile
     public function __construct(
         private string $filename
     ) {
-        $this->tokens = \PhpToken::tokenize(file_get_contents($this->filename));
+        $this->tokens = PhpToken::tokenize(file_get_contents($this->filename));
         $this->countTokens = \count($this->tokens);
 
         //Looking for declarations
