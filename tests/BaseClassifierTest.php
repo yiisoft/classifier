@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Classifier\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Classifier\Classifier;
+use Yiisoft\Classifier\ClassifierInterface;
+use Yiisoft\Classifier\Filter\ClassAttributes;
+use Yiisoft\Classifier\Filter\ClassImplements;
+use Yiisoft\Classifier\Filter\SubclassOf;
+use Yiisoft\Classifier\Filter\TargetAttribute;
 use Yiisoft\Classifier\Tests\Support\Attributes\AuthorAttribute;
+use Yiisoft\Classifier\Tests\Support\Attributes\UserAttribute;
 use Yiisoft\Classifier\Tests\Support\Author;
 use Yiisoft\Classifier\Tests\Support\AuthorPost;
 use Yiisoft\Classifier\Tests\Support\Dir1\UserInDir1;
@@ -20,13 +25,24 @@ use Yiisoft\Classifier\Tests\Support\SuperUser;
 use Yiisoft\Classifier\Tests\Support\User;
 use Yiisoft\Classifier\Tests\Support\UserSubclass;
 
-final class ClassifierTest extends TestCase
+abstract class BaseClassifierTest extends TestCase
 {
-    public function testMultipleDirectories()
+    public function testMultipleUse(): void
     {
         $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
-        $finder = new Classifier(...$dirs);
-        $finder = $finder->withInterface(UserInterface::class);
+        $finder = $this->createClassifier(...$dirs);
+        $finder = $finder->withFilter(new ClassImplements(UserInterface::class));
+
+        $result = $finder->find();
+
+        $this->assertEqualsCanonicalizing(iterator_to_array($finder->find()), iterator_to_array($result));
+    }
+
+    public function testMultipleDirectories(): void
+    {
+        $dirs = [__DIR__ . '/Support/Dir1', __DIR__ . '/Support/Dir2'];
+        $finder = $this->createClassifier(...$dirs);
+        $finder = $finder->withFilter(new ClassImplements(UserInterface::class));
 
         $result = $finder->find();
 
@@ -38,15 +54,15 @@ final class ClassifierTest extends TestCase
      */
     public function testInterfaces(string $directory, array $interfaces, array $expectedClasses): void
     {
-        $finder = new Classifier($directory);
-        $finder = $finder->withInterface(...$interfaces);
+        $finder = $this->createClassifier($directory);
+        $finder = $finder->withFilter(new ClassImplements(...$interfaces));
 
         $result = $finder->find();
 
         $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
-    public function interfacesDataProvider(): array
+    public static function interfacesDataProvider(): array
     {
         return [
             [
@@ -67,7 +83,15 @@ final class ClassifierTest extends TestCase
             [
                 __DIR__,
                 [UserInterface::class],
-                [UserInDir1::class, UserInDir2::class, PostUser::class, SuperSuperUser::class, SuperUser::class, User::class, UserSubclass::class],
+                [
+                    UserInDir1::class,
+                    UserInDir2::class,
+                    PostUser::class,
+                    SuperSuperUser::class,
+                    SuperUser::class,
+                    User::class,
+                    UserSubclass::class,
+                ],
             ],
             [
                 __DIR__,
@@ -92,8 +116,21 @@ final class ClassifierTest extends TestCase
      */
     public function testAttributes(array $attributes, array $expectedClasses): void
     {
-        $finder = new Classifier(__DIR__);
-        $finder = $finder->withAttribute(...$attributes);
+        $finder = $this->createClassifier(__DIR__);
+        $finder = $finder->withFilter(new ClassAttributes(...$attributes));
+
+        $result = $finder->find();
+
+        $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
+    }
+
+    /**
+     * @dataProvider targetAttributeDataProvider
+     */
+    public function testTargetAttribute(string $attribute, array $expectedClasses): void
+    {
+        $finder = $this->createClassifier(__DIR__);
+        $finder = $finder->withFilter(new TargetAttribute($attribute));
 
         $result = $finder->find();
 
@@ -105,15 +142,15 @@ final class ClassifierTest extends TestCase
      */
     public function testParentClass(string $parent, array $expectedClasses): void
     {
-        $finder = new Classifier(__DIR__);
-        $finder = $finder->withParentClass($parent);
+        $finder = $this->createClassifier(__DIR__);
+        $finder = $finder->withFilter(new SubclassOf($parent));
 
         $result = $finder->find();
 
         $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
-    public function attributesDataProvider(): array
+    public static function attributesDataProvider(): array
     {
         return [
             [
@@ -121,7 +158,25 @@ final class ClassifierTest extends TestCase
                 [],
             ],
             [
-                [AuthorAttribute::class],
+                [AuthorAttribute::class, UserAttribute::class],
+                [Author::class, AuthorPost::class],
+            ],
+        ];
+    }
+
+    public static function targetAttributeDataProvider(): array
+    {
+        return [
+            [
+                UserSubclass::class,
+                [],
+            ],
+            [
+                UserAttribute::class,
+                [Author::class, AuthorPost::class],
+            ],
+            [
+                AuthorAttribute::class,
                 [Author::class, AuthorPost::class],
             ],
         ];
@@ -132,17 +187,16 @@ final class ClassifierTest extends TestCase
      */
     public function testMixed(array $attributes, array $interfaces, array $expectedClasses): void
     {
-        $finder = new Classifier(__DIR__);
+        $finder = $this->createClassifier(__DIR__);
         $finder = $finder
-            ->withAttribute(...$attributes)
-            ->withInterface(...$interfaces);
+            ->withFilter(new ClassAttributes(...$attributes), new ClassImplements(...$interfaces));
 
         $result = $finder->find();
 
         $this->assertEqualsCanonicalizing($expectedClasses, iterator_to_array($result));
     }
 
-    public function mixedDataProvider(): array
+    public static function mixedDataProvider(): array
     {
         return [
             [
@@ -158,7 +212,7 @@ final class ClassifierTest extends TestCase
         ];
     }
 
-    public function parentClassDataProvider(): array
+    public static function parentClassDataProvider(): array
     {
         return [
             [
@@ -167,4 +221,6 @@ final class ClassifierTest extends TestCase
             ],
         ];
     }
+
+    abstract protected function createClassifier(string ...$dirs): ClassifierInterface;
 }
