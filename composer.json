@@ -3,17 +3,20 @@
     "type": "library",
     "description": "Finds classes that implement interfaces",
     "keywords": [
-        "yiisoft", "classifier", "find", "interface"
+        "yiisoft",
+        "classifier",
+        "find",
+        "interface"
     ],
     "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/yiisoft/classifier/issues?state=open",
+        "source": "https://github.com/yiisoft/classifier",
         "forum": "https://www.yiiframework.com/forum/",
         "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "ircs://irc.libera.chat:6697/yii",
-        "chat": "https://t.me/yii3en",
-        "source": "https://github.com/yiisoft/classifier"
+        "chat": "https://t.me/yii3en"
     },
     "funding": [
         {
