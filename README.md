@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
+        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
     </a>
     <h1 align="center">Yii Classifier</h1>
     <br>
@@ -15,7 +15,7 @@
 [![static analysis](https://github.com/yiisoft/classifier/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/classifier/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/classifier/coverage.svg)](https://shepherd.dev/github/yiisoft/classifier)
 
-The package ...
+Classifier traverses file system to find classes by a certain criteria.
 
 ## Requirements
 
@@ -23,40 +23,33 @@ The package ...
 
 ## Installation
 
-The package could be installed with composer:
+The package could be installed with [Composer](https://getcomposer.org):
 
 ```shell
-composer require yiisoft/classifier --prefer-dist
+composer require yiisoft/classifier
 ```
 
-## General usage
+## Documentation
 
-## Testing
+Usage of classifier is the following:
 
-### Unit testing
+```php
+use \Yiisoft\Classifier\Classifier;
+use \Psr\SimpleCache\CacheInterface;
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
-
-```shell
-./vendor/bin/phpunit
+$cacheInstances = (new Classifier('src'))
+    ->withInterface(CacheInterface::class) // can use ->withParentClass() instead
+    ->withAttribute(MyAttribute::class)
+    ->find();
 ```
 
-### Mutation testing
+You specify one more directories to traverse, interfaces, base classes, attributes to search for and call `find()`
+method which returns a list of classes found.
 
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
-[Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
+- [Internals](docs/internals.md)
 
-```shell
-./vendor/bin/roave-infection-static-analysis-plugin
-```
-
-### Static analysis
-
-The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
-
-```shell
-./vendor/bin/psalm
-```
+If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
+You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
 
 ## License
 
