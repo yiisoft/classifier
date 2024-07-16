@@ -28,11 +28,9 @@
             "url": "https://github.com/sponsors/yiisoft"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^8.0",
-        "symfony/finder": "^5.4|^6.0"
+        "symfony/finder": "^5.4|^6.0|^7.1"
     },
     "require-dev": {
         "maglnet/composer-require-checker": "^4.2",
@@ -50,11 +48,6 @@
     "autoload-dev": {
         "psr-4": {
             "Yiisoft\\Classifier\\Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
         }
     },
     "config": {
