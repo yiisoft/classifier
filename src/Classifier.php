@@ -9,7 +9,7 @@ use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Classifier traverses file system to find classes and interfaces by a certain criteria.
+ * Classifier traverses file system to find classes by a certain criteria.
  */
 final class Classifier
 {

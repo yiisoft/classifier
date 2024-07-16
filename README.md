@@ -15,7 +15,7 @@
 [![static analysis](https://github.com/yiisoft/classifier/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/classifier/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/classifier/coverage.svg)](https://shepherd.dev/github/yiisoft/classifier)
 
-Classifier traverses file system to find classes and interfaces by a certain criteria.
+Classifier traverses file system to find classes by a certain criteria.
 
 ## Requirements
 

@@ -1,7 +1,7 @@
 {
     "name": "yiisoft/classifier",
     "type": "library",
-    "description": "Classifier traverses file system to find classes and interfaces by a certain criteria.",
+    "description": "Classifier traverses file system to find classes by a certain criteria.",
     "keywords": [
         "yiisoft",
         "classifier",
