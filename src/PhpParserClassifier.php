@@ -27,14 +27,13 @@ final class PhpParserClassifier
 
     public function __construct(private string $directory)
     {
-        $traverser = new NodeTraverser;
+        $traverser = new NodeTraverser();
         $nameResolver = new NameResolver();
         $traverser->addVisitor($nameResolver);
         $this->parser = (new ParserFactory())
             ->create(ParserFactory::PREFER_PHP7);
         $this->traverser = $traverser;
         $this->nodeFinder = new NodeFinder();
-
     }
 
     public function withInterface(string|array $interfaces): self
@@ -95,10 +94,10 @@ final class PhpParserClassifier
                             $attributesNames[] = $attr->name->toString();
                         }
                     }
-                    if (count(array_intersect($attributes, $attributesNames)) !== $countAttributes) {
-                        return false;
-                    }
-                    return true;
+                    return !(count(array_intersect($attributes, $attributesNames)) !== $countAttributes)
+
+
+                     ;
                 }
             );
             foreach ($result as $class) {
@@ -106,5 +105,4 @@ final class PhpParserClassifier
             }
         }
     }
-
 }

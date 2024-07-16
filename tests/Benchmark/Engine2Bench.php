@@ -7,7 +7,6 @@ namespace Yiisoft\Classifier\Tests\Benchmark;
 use PhpBench\Benchmark\Metadata\Annotations\BeforeMethods;
 use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
-use Yiisoft\Classifier\Classifier;
 use Yiisoft\Classifier\PhpParserClassifier;
 use Yiisoft\Classifier\Tests\Support\Interfaces\PostInterface;
 use Yiisoft\Classifier\Tests\Support\Interfaces\UserInterface;
@@ -20,6 +19,7 @@ final class Engine2Bench
     {
         $this->finder = new PhpParserClassifier(__DIR__);
     }
+
     /**
      * @BeforeMethods("beforeTest")
      * @ParamProviders("dataProviderInterfaces")

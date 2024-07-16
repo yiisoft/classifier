@@ -63,26 +63,26 @@ abstract class BaseClassifierTest extends TestCase
     public function dataProviderInterfaces(): array
     {
         return [
-//            [
-//                [],
-//                [],
-//            ],
-//            [
-//                PostInterface::class,
-//                [AuthorPost::class, Post::class, PostUser::class],
-//            ],
-//            [
-//                [PostInterface::class],
-//                [AuthorPost::class, Post::class, PostUser::class],
-//            ],
+            //            [
+            //                [],
+            //                [],
+            //            ],
+            //            [
+            //                PostInterface::class,
+            //                [AuthorPost::class, Post::class, PostUser::class],
+            //            ],
+            //            [
+            //                [PostInterface::class],
+            //                [AuthorPost::class, Post::class, PostUser::class],
+            //            ],
             [
                 [UserInterface::class],
                 [PostUser::class, User::class, UserSubclass::class],
             ],
-//            [
-//                [PostInterface::class, UserInterface::class],
-//                [PostUser::class],
-//            ],
+            //            [
+            //                [PostInterface::class, UserInterface::class],
+            //                [PostUser::class],
+            //            ],
         ];
     }
 

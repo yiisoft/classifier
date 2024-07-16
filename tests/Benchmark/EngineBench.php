@@ -19,6 +19,7 @@ final class EngineBench
     {
         $this->finder = new Classifier(__DIR__);
     }
+
     /**
      * @BeforeMethods("beforeTest")
      * @ParamProviders("dataProviderInterfaces")
@@ -35,7 +36,7 @@ final class EngineBench
     {
         return [
             [PostInterface::class],
-            [UserInterface::class]
+            [UserInterface::class],
         ];
     }
 }
