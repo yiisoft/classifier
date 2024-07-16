@@ -6,6 +6,7 @@ on:
       - 'CHANGELOG.md'
       - '.gitignore'
       - '.gitattributes'
+      - 'infection.json.dist'
       - 'psalm.xml'
 
   push:
@@ -15,17 +16,18 @@ on:
       - 'CHANGELOG.md'
       - '.gitignore'
       - '.gitattributes'
+      - 'infection.json.dist'
       - 'psalm.xml'
 
-name: mutation test
+name: bechmark
 
 jobs:
-  mutation:
-    uses: yiisoft/actions/.github/workflows/roave-infection.yml@master
+  phpbench:
+    uses: yiisoft/actions/.github/workflows/phpbench.yml@master
     with:
       os: >-
-        ['ubuntu-latest']
+        ['ubuntu-latest', 'windows-latest']
       php: >-
-        ['8.2']
-    secrets:
-      STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+        ['8.1', '8.2']
+      report: aggregate
+

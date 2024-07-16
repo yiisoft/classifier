@@ -30,11 +30,12 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "symfony/finder": "^5.4|^6.0|^7.1"
     },
     "require-dev": {
         "maglnet/composer-require-checker": "^4.2",
+        "phpbench/phpbench": "^1.2",
         "phpunit/phpunit": "^9.5",
         "rector/rector": "^1.0.0",
         "roave/infection-static-analysis-plugin": "^1.16",
@@ -50,6 +51,9 @@
         "psr-4": {
             "Yiisoft\\Classifier\\Tests\\": "tests"
         }
+    },
+    "suggest": {
+        "ext-tokenizer": "Need for TokenizerClassifier implementation"
     },
     "config": {
         "sort-packages": true,
