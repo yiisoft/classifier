@@ -8,31 +8,40 @@ use ReflectionAttribute;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Classifier traverses file system to find classes by a certain criteria.
+ */
 final class Classifier
 {
     /**
-     * @var string[]
+     * @var string[] Interfaces to search for.
      */
     private array $interfaces = [];
     /**
-     * @var string[]
+     * @var string[] Attributes to search for.
      */
     private array $attributes = [];
     /**
+     * @var ?string Parent class to search for.
      * @psalm-var class-string
      */
     private ?string $parentClass = null;
     /**
-     * @var string[]
+     * @var string[] Directories to traverse.
      */
     private array $directories;
 
+    /**
+     * @param string $directory Directory to traverse.
+     * @param string ...$directories Extra directories to traverse.
+     */
     public function __construct(string $directory, string ...$directories)
     {
         $this->directories = [$directory, ...array_values($directories)];
     }
 
     /**
+     * @param string ...$interfaces Interfaces to search for.
      * @psalm-param class-string ...$interfaces
      */
     public function withInterface(string ...$interfaces): self
@@ -44,6 +53,7 @@ final class Classifier
     }
 
     /**
+     * @param string $parentClass Parent class to search for.
      * @psalm-param class-string $parentClass
      */
     public function withParentClass(string $parentClass): self
@@ -54,6 +64,7 @@ final class Classifier
     }
 
     /**
+     * @para string ...$attributes Attributes to search for.
      * @psalm-param class-string ...$attributes
      */
     public function withAttribute(string ...$attributes): self
@@ -65,6 +76,7 @@ final class Classifier
     }
 
     /**
+     * @return string[] Classes found.
      * @psalm-return iterable<class-string>
      */
     public function find(): iterable
@@ -133,6 +145,7 @@ final class Classifier
     }
 
     /**
+     * Find all PHP files and require each one so these could be further analyzed via reflection.
      * @psalm-suppress UnresolvableInclude
      */
     private function scanFiles(): void

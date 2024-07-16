@@ -15,7 +15,7 @@
 [![static analysis](https://github.com/yiisoft/classifier/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/classifier/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/classifier/coverage.svg)](https://shepherd.dev/github/yiisoft/classifier)
 
-The package ...
+Classifier traverses file system to find classes by a certain criteria.
 
 ## Requirements
 
@@ -30,6 +30,21 @@ composer require yiisoft/classifier
 ```
 
 ## Documentation
+
+Usage of classifier is the following:
+
+```php
+use \Yiisoft\Classifier\Classifier;
+use \Psr\SimpleCache\CacheInterface;
+
+$cacheInstances = (new Classifier('src'))
+    ->withInterface(CacheInterface::class) // can use ->withParentClass() instead
+    ->withAttribute(MyAttribute::class)
+    ->find();
+```
+
+You specify one more directories to traverse, interfaces, base classes, attributes to search for and call `find()`
+method which returns a list of classes found.
 
 - [Internals](docs/internals.md)
 

@@ -1,12 +1,13 @@
 {
     "name": "yiisoft/classifier",
     "type": "library",
-    "description": "Finds classes that implement interfaces",
+    "description": "Classifier traverses file system to find classes by a certain criteria.",
     "keywords": [
         "yiisoft",
         "classifier",
         "find",
-        "interface"
+        "interface",
+        "attribute"
     ],
     "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
