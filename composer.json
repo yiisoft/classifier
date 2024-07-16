@@ -35,6 +35,7 @@
     },
     "require-dev": {
         "maglnet/composer-require-checker": "^4.2",
+        "nikic/php-parser": "^4.17",
         "phpunit/phpunit": "^9.5",
         "rector/rector": "^1.0.0",
         "roave/infection-static-analysis-plugin": "^1.16",
@@ -50,6 +51,9 @@
         "psr-4": {
             "Yiisoft\\Classifier\\Tests\\": "tests"
         }
+    },
+    "suggest": {
+        "nikic/php-parser": "Need for ParserClassifier implementation"
     },
     "config": {
         "sort-packages": true,
