@@ -7,6 +7,4 @@ namespace Yiisoft\Classifier\Tests\Support\Attributes;
 use Attribute;
 
 #[Attribute]
-class AuthorAttribute
-{
-}
+class AuthorAttribute {}

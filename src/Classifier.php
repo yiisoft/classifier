@@ -8,6 +8,10 @@ use ReflectionAttribute;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
+use function count;
+
+use const DIRECTORY_SEPARATOR;
+
 /**
  * Classifier traverses file system to find classes by a certain criteria.
  */
@@ -108,7 +112,7 @@ final class Classifier
 
             $matchedDirs = array_filter(
                 $directories,
-                static fn($directory) => str_starts_with($reflection->getFileName(), $directory)
+                static fn($directory) => str_starts_with($reflection->getFileName(), $directory),
             );
 
             if (count($matchedDirs) === 0) {
@@ -128,7 +132,7 @@ final class Classifier
                 $attributes = $reflection->getAttributes();
                 $attributes = array_map(
                     static fn(ReflectionAttribute $attribute) => $attribute->getName(),
-                    $attributes
+                    $attributes,
                 );
 
                 if (count(array_intersect($this->attributes, $attributes)) !== $countAttributes) {

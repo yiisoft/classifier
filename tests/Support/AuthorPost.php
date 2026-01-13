@@ -8,6 +8,4 @@ use Yiisoft\Classifier\Tests\Support\Attributes\AuthorAttribute;
 use Yiisoft\Classifier\Tests\Support\Interfaces\PostInterface;
 
 #[AuthorAttribute]
-class AuthorPost implements PostInterface
-{
-}
+class AuthorPost implements PostInterface {}
