@@ -6,6 +6,4 @@ namespace Yiisoft\Classifier\Tests\Support\Dir1;
 
 use Yiisoft\Classifier\Tests\Support\Interfaces\UserInterface;
 
-class UserInDir1 implements UserInterface
-{
-}
+class UserInDir1 implements UserInterface {}

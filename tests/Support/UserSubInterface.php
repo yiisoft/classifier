@@ -6,6 +6,4 @@ namespace Yiisoft\Classifier\Tests\Support;
 
 use Yiisoft\Classifier\Tests\Support\Interfaces\UserInterface;
 
-interface UserSubInterface extends UserInterface
-{
-}
+interface UserSubInterface extends UserInterface {}
