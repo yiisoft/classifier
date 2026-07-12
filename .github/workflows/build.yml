@@ -22,6 +22,8 @@ concurrency:
 jobs:
   phpunit:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     with:
       php: >-
         ['8.0', '8.1']
