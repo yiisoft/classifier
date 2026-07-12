@@ -23,4 +23,4 @@ jobs:
     uses: yiisoft/actions/.github/workflows/composer-require-checker.yml@master
     with:
       php: >-
-        ['8.2']
+        ['8.0']
