@@ -31,6 +31,8 @@
     ],
     "require": {
         "php": "^8.0",
+        "nikic/php-parser": "^4.15",
+        "phpbench/phpbench": "^1.2",
         "symfony/finder": "^5.4|^6.0|^7.1"
     },
     "require-dev": {
